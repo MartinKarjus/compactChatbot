@@ -64,7 +64,7 @@ CREATE TABLE chatfuel (
   chatfuel_id BIGINT,
   FOREIGN KEY (person_id)
     REFERENCES person ON DELETE CASCADE
-)
+);
 
 CREATE TABLE person (
  id BIGINT NOT NULL PRIMARY KEY,
