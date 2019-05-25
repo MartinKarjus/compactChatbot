@@ -53,8 +53,18 @@ CREATE TABLE time_of_day (
 
 CREATE TABLE question_group (
  id BIGINT NOT NULL PRIMARY KEY,
- platform VARCHAR(100)
+ platform VARCHAR(200),
+ company VARCHAR(200)
 );
+
+
+CREATE TABLE chatfuel (
+  id BIGINT NOT NULL PRIMARY KEY,
+  person_id BIGINT,
+  chatfuel_id BIGINT,
+  FOREIGN KEY (person_id)
+    REFERENCES person ON DELETE CASCADE
+)
 
 CREATE TABLE person (
  id BIGINT NOT NULL PRIMARY KEY,
