@@ -69,7 +69,7 @@ CREATE TABLE person (
 CREATE TABLE chatfuel (
   id BIGINT NOT NULL PRIMARY KEY,
   person_id BIGINT,
-  chatfuel_id BIGINT,
+  chatfuel_id VARCHAR(200),
   FOREIGN KEY (person_id)
     REFERENCES person ON DELETE CASCADE
 );
@@ -105,6 +105,15 @@ CREATE TABLE action_plan (
 
 CREATE TABLE action_plan_archive (
  id BIGINT NOT NULL PRIMARY KEY,
+ thisTableShouldBeArchiveToActionPlan BIGINT
+);
+
+CREATE TABLE team (
+  id BIGINT NOT NULL PRIMARY KEY,
+  person_id BIGINT,
+  team_id BIGINT,
+   FOREIGN KEY (person_id)
+    REFERENCES person ON DELETE CASCADE
 );
 
 
