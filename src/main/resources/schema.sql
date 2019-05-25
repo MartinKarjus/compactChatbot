@@ -58,19 +58,20 @@ CREATE TABLE question_group (
 );
 
 
-CREATE TABLE chatfuel (
-  id BIGINT NOT NULL PRIMARY KEY,
-  person_id BIGINT,
-  chatfuel_id BIGINT,
-  FOREIGN KEY (person_id)
-    REFERENCES person ON DELETE CASCADE
-);
 
 CREATE TABLE person (
  id BIGINT NOT NULL PRIMARY KEY,
  question_group_id BIGINT NOT NULL,
  FOREIGN KEY (question_group_id)
     REFERENCES question_group ON DELETE CASCADE
+);
+
+CREATE TABLE chatfuel (
+  id BIGINT NOT NULL PRIMARY KEY,
+  person_id BIGINT,
+  chatfuel_id BIGINT,
+  FOREIGN KEY (person_id)
+    REFERENCES person ON DELETE CASCADE
 );
 
 CREATE TABLE asked_questions (
