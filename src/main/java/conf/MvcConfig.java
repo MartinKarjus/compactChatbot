@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @Import(DbConfig.class)
-@ComponentScan(basePackages = {"controller", "bot"})
+@ComponentScan(basePackages = {"controller", "bot","chatfuelapi"})
 @EnableScheduling
 public class MvcConfig {
 

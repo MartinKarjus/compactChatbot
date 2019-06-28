@@ -1,17 +1,13 @@
 package controller;
 
-import order.OrderJpa;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
+import objects.chatfuel.ChatfuelRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ChatfuelJsonApiController {
+public class ChatfuelTestController {
     @GetMapping("test")
     public String tryGet() {
+        System.out.println("test Get");
         return "{\n" +
                 " \"messages\": [\n" +
                 "   {\"text\": \"This thing\"},\n" +
@@ -21,9 +17,12 @@ public class ChatfuelJsonApiController {
     }
 
     @PostMapping("test")
-    public String tryPost(@RequestBody String req) {
-        System.out.println(req);
+    public String tryPost(@RequestBody ChatfuelRequest req) {
         System.out.println("getting req");
+        System.out.println(req.getId());
+        System.out.println(req);
+        //String jsonString = req.getParameter("json");
+
         return "{\n" +
                 "  \"messages\": [\n" +
                 "    {\n" +
@@ -125,6 +124,8 @@ public class ChatfuelJsonApiController {
                 "}";
     }
 
+
+    //@PostMapping("chatfuel/getupdate")
 
 
 }
