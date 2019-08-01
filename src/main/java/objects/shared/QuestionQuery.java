@@ -1,4 +1,4 @@
-package objects;
+package objects.shared;
 
 import lombok.Data;
 
@@ -20,6 +20,10 @@ public class QuestionQuery {
     private String queryResponse;
     @Column(name = "question_id")
     private Long questionId;
+    @Column(name = "media_id")
+    private Long mediaId;
+    @Column(name = "leads_to_content_id")
+    private Long leadsToContentId;
 
 
 }

@@ -1,10 +1,23 @@
 package controller;
 
+import dao.BotUserDao;
 import objects.chatfuel.ChatfuelRequest;
-import org.springframework.web.bind.annotation.*;
+import objects.shared.BotUser;
+import objects.shared.Usergroup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ChatfuelTestController {
+
+    @Autowired
+    private BotUserDao botUserDao;
+
     @GetMapping("test")
     public String tryGet() {
         System.out.println("test Get");
@@ -14,6 +27,25 @@ public class ChatfuelTestController {
                 "   {\"text\": \"Actually works\"}\n" +
                 " ]\n" +
                 "}";
+    }
+
+    @GetMapping("cake")
+    public List<BotUser> cake() {
+        System.out.println("cakeRequest");
+        return botUserDao.getAllUsers();
+    }
+
+    @GetMapping("cake2")
+    public List<BotUser> cake2() {
+        System.out.println("cakeRequest2");
+        return botUserDao.getAllUsersFromPlatform("chatfuel");
+    }
+    @GetMapping("cake3")
+    public List<Usergroup> cake3() {
+        System.out.println("cakeRequest3");
+        List<Usergroup> usergroups = botUserDao.getUsergroupsByUsers(botUserDao.getAllUsersFromPlatform("chatfuel"));
+        usergroups.forEach(g -> System.out.println(g.getStartDate()));
+        return usergroups;
     }
 
     @PostMapping("test")

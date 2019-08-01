@@ -1,7 +1,6 @@
 package objects;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 

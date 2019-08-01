@@ -1,4 +1,4 @@
-package objects;
+package objects.shared;
 
 
 import lombok.Data;
@@ -20,5 +20,7 @@ public class Question {
     private String text;
     @Column(name = "can_be_random_selected")
     boolean canBeRandomSelected;
+    @Column(name = "media_id")
+    private Long mediaId;
 
 }

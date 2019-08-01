@@ -1,30 +1,33 @@
 package controller;
 
-import chatfuelapi.ChatfuelUserHandler;
-import objects.chatfuel.ChatfuelRequest;
+import bot.chatfuelapi.ChatfuelContentUpdater;
+import dao.BotUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+
+@RestController
 public class ChatfuelController {
 
-    final
-    ChatfuelUserHandler userHandler;
+    @Autowired
+    private ChatfuelContentUpdater contentUpdater;
 
     @Autowired
-    public ChatfuelController(ChatfuelUserHandler userHandler) {
-        this.userHandler = userHandler;
-    }
+    private BotUserDao botUserDao;
 
     @GetMapping("chatfuel/update")
     public String chatfuelUpdate() {
+        contentUpdater.updateUsers();
+
         System.out.println("checking users, sending new msges if needed");
-        userHandler.updateUsers();
         return "{\n" +
                 " \"messages\": [\n" +
                 "   {\"text\": \"Users updated\"},\n" +
                 " ]\n" +
                 "}";
     }
+
+
+
 }
