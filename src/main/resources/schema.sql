@@ -96,7 +96,7 @@ CREATE TABLE main.question_query
 CREATE TABLE main.time_to_send
 (
     id                BIGINT NOT NULL PRIMARY KEY,
-    time_as_datetime  TIMESTAMP
+    time_to_send  DATE
 );
 
 CREATE TABLE main.plan
@@ -124,6 +124,7 @@ CREATE TABLE main.user (
      team_id BIGINT,
      company BIGINT NOT NULL,
      score BIGINT,
+     join_date DATE,
      question_group_id BIGINT NOT NULL,
      FOREIGN KEY (question_group_id)
        REFERENCES main.question_group ON DELETE CASCADE,
@@ -160,6 +161,7 @@ CREATE TABLE main.answers_log
     id                BIGINT NOT NULL,
     question_query_id BIGINT,
     user_id           BIGINT,
+    points            BIGINT,
     answer            VARCHAR(250),
     FOREIGN KEY (user_id)
         REFERENCES main.user (id) ON DELETE CASCADE,
@@ -172,13 +174,13 @@ CREATE TABLE main.platform(
     name VARCHAR(5000)
 );
 
-CREATE TABLE main.platform_to_company
+CREATE TABLE main.platform_to_user
 (
     id                    BIGINT NOT NULL PRIMARY KEY,
-    company_id            BIGINT,
+    user_id            BIGINT,
     platform_id           BIGINT,
-    FOREIGN KEY (company_id)
-        REFERENCES main.company (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id)
+        REFERENCES main.user (id) ON DELETE CASCADE,
     FOREIGN KEY (platform_id)
         REFERENCES main.platform (id) ON DELETE CASCADE
 );
