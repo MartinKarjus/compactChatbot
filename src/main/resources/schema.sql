@@ -1,6 +1,6 @@
-DROP SCHEMA PUBLIC CASCADE;
+-- DROP SCHEMA PUBLIC CASCADE;
 
-CREATE SCHEMA main;
+-- CREATE SCHEMA public;
 
 CREATE
     SEQUENCE content_sequence AS INTEGER START
@@ -41,17 +41,23 @@ CREATE
     WITH 1;
 
 
-CREATE TABLE main.question_group (
+CREATE TABLE public.company (
+                              id BIGINT NOT NULL PRIMARY KEY,
+                              date_created TIMESTAMP,
+                              name VARCHAR(200)
+);
+
+CREATE TABLE public.question_group (
    id BIGINT NOT NULL PRIMARY KEY,
    name VARCHAR(250) NOT NULL,
    date_created TIMESTAMP,
    date_modified TIMESTAMP,
    company_id BIGINT,
    FOREIGN KEY (company_id)
-     REFERENCES main.company (id) on DELETE CASCADE
+     REFERENCES public.company (id) on DELETE CASCADE
 );
 
-CREATE TABLE main.media
+CREATE TABLE public.media
 (
     id     BIGINT NOT NULL PRIMARY KEY,
     date_created TIMESTAMP,
@@ -60,7 +66,7 @@ CREATE TABLE main.media
     source VARCHAR(5000)
 );
 
-CREATE TABLE main.question
+CREATE TABLE public.question
 (
     id                     BIGINT NOT NULL PRIMARY KEY,
     date_created           TIMESTAMP,
@@ -72,7 +78,7 @@ CREATE TABLE main.question
     leads_to_question_id   BIGINT,
     media_id               BIGINT,
     FOREIGN KEY (media_id)
-        REFERENCES main.media (id) ON DELETE CASCADE
+        REFERENCES public.media (id) ON DELETE CASCADE
 );
 
 -- CREATE TABLE main.content
@@ -106,14 +112,14 @@ CREATE TABLE main.question
 --         REFERENCES main.media (id) ON DELETE CASCADE
 -- );
 
-CREATE TABLE main.time_to_send
+CREATE TABLE public.time_to_send
 (
     id                BIGINT NOT NULL PRIMARY KEY,
     date_created      TIMESTAMP,
     time_to_send      DATE
 );
 
-CREATE TABLE main.plan
+CREATE TABLE public.plan
 (
     id              BIGINT NOT NULL PRIMARY KEY,
     date_created    TIMESTAMP,
@@ -123,14 +129,22 @@ CREATE TABLE main.plan
     day             BIGINT,
     company_id      BIGINT,
     FOREIGN KEY (company_id)
-        REFERENCES main.company (id) ON DELETE CASCADE,
+        REFERENCES public.company (id) ON DELETE CASCADE,
     FOREIGN KEY (question_id)
-        REFERENCES main.question (id) ON DELETE CASCADE,
+        REFERENCES public.question (id) ON DELETE CASCADE,
     FOREIGN KEY (time_to_send_id)
-        REFERENCES main.time_to_send (id) ON DELETE CASCADE
+        REFERENCES public.time_to_send (id) ON DELETE CASCADE
 );
 
-CREATE TABLE main.user (
+CREATE TABLE public.team (
+                           id BIGINT NOT NULL PRIMARY KEY,
+                           name VARCHAR(200) NOT NULL,
+                           date_created TIMESTAMP,
+                           date_modified TIMESTAMP,
+                           score BIGINT
+);
+
+CREATE TABLE public.user (
      id BIGINT NOT NULL PRIMARY KEY,
      first_name VARCHAR(200),
      last_name VARCHAR(200),
@@ -144,40 +158,26 @@ CREATE TABLE main.user (
      score BIGINT,
      question_group_id BIGINT NOT NULL,
      FOREIGN KEY (question_group_id)
-       REFERENCES main.question_group ON DELETE CASCADE,
+       REFERENCES public.question_group ON DELETE CASCADE,
      FOREIGN KEY (team_id)
-       REFERENCES main.team ON DELETE CASCADE,
+       REFERENCES public.team ON DELETE CASCADE,
      FOREIGN KEY (company)
-       REFERENCES main.company ON DELETE CASCADE
+       REFERENCES public.company ON DELETE CASCADE
 );
 
-CREATE TABLE main.team (
-   id BIGINT NOT NULL PRIMARY KEY,
-   name VARCHAR(200) NOT NULL,
-   date_created TIMESTAMP,
-   date_modified TIMESTAMP,
-   score BIGINT
-);
-
-CREATE TABLE main.company (
-  id BIGINT NOT NULL PRIMARY KEY,
-  date_created TIMESTAMP,
-  name VARCHAR(200)
-);
-
-CREATE TABLE main.plan_accomplished
+CREATE TABLE public.plan_accomplished
 (
     id           BIGINT NOT NULL PRIMARY KEY,
     date_created TIMESTAMP,
     user_id      BIGINT,
     plan_id      BIGINT,
     FOREIGN KEY (user_id)
-        REFERENCES main.user (id) ON DELETE CASCADE,
+        REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (plan_id)
-        REFERENCES main.plan (id) ON DELETE CASCADE
+        REFERENCES public.plan (id) ON DELETE CASCADE
 );
 
-CREATE TABLE main.transmission_log
+CREATE TABLE public.transmission_log
 (
   id      BIGINT NOT NULL primary key,
   question_id BIGINT,
@@ -185,36 +185,37 @@ CREATE TABLE main.transmission_log
   user_id BIGINT,
   state VARCHAR(250),
   FOREIGN KEY (user_id)
-    REFERENCES main.user (id) on DELETE CASCADE,
+    REFERENCES public.user (id) on DELETE CASCADE,
   FOREIGN KEY (question_id)
-    REFERENCES main.question (id) ON DELETE CASCADE
+    REFERENCES public.question (id) ON DELETE CASCADE
 );
 
-CREATE TABLE main.answers
+CREATE TABLE public.answers
 (
     id                BIGINT NOT NULL PRIMARY KEY,
     question_id BIGINT,
+    date_created      TIMESTAMP,
     user_id           BIGINT,
     points            BIGINT,
     answer            VARCHAR(250),
     FOREIGN KEY (user_id)
-        REFERENCES main.user (id) ON DELETE CASCADE,
+        REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (question_id)
-        REFERENCES main.question (id) ON DELETE CASCADE
+        REFERENCES public.question (id) ON DELETE CASCADE
 );
 
-CREATE TABLE main.platform(
+CREATE TABLE public.platform(
     id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR(5000)
 );
 
-CREATE TABLE main.platform_to_user
+CREATE TABLE public.platform_to_user
 (
     id                    BIGINT NOT NULL PRIMARY KEY,
     user_id            BIGINT,
     platform_id           BIGINT,
     FOREIGN KEY (user_id)
-        REFERENCES main.user (id) ON DELETE CASCADE,
+        REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (platform_id)
-        REFERENCES main.platform (id) ON DELETE CASCADE
+        REFERENCES public.platform (id) ON DELETE CASCADE
 );

@@ -1,9 +1,7 @@
 package controller;
 
-import dao.BotUserDao;
-import objects.chatfuel.ChatfuelRequest;
-import objects.shared.BotUser;
-import objects.shared.Usergroup;
+import dao.UserDao;
+import objects.shared.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +14,7 @@ import java.util.List;
 public class ChatfuelTestController {
 
     @Autowired
-    private BotUserDao botUserDao;
+    private UserDao userDao;
 
     @GetMapping("test")
     public String tryGet() {
@@ -30,44 +28,44 @@ public class ChatfuelTestController {
     }
 
     @GetMapping("cake")
-    public List<BotUser> cake() {
+    public List<User> cake() {
         System.out.println("cakeRequest");
-        return botUserDao.getAllUsers();
+        return userDao.getAllUsers();
     }
 
-    @GetMapping("cake2")
-    public List<BotUser> cake2() {
-        System.out.println("cakeRequest2");
-        return botUserDao.getAllUsersFromPlatform("chatfuel");
-    }
-    @GetMapping("cake3")
-    public List<Usergroup> cake3() {
-        System.out.println("cakeRequest3");
-        List<Usergroup> usergroups = botUserDao.getUsergroupsByUsers(botUserDao.getAllUsersFromPlatform("chatfuel"));
-        usergroups.forEach(g -> System.out.println(g.getStartDate()));
-        return usergroups;
-    }
+//    @GetMapping("cake2")
+//    public List<User> cake2() {
+//        System.out.println("cakeRequest2");
+//        return userDao.getAllUsersFromPlatform("chatfuel");
+//    }
+//    @GetMapping("cake3")
+//    public List<Usergroup> cake3() {
+//        System.out.println("cakeRequest3");
+//        List<Usergroup> usergroups = userDao.getUsergroupsByUsers(userDao.getAllUsersFromPlatform("chatfuel"));
+//        usergroups.forEach(g -> System.out.println(g.getStartDate()));
+//        return usergroups;
+//    }
 
-    @PostMapping("test")
-    public String tryPost(@RequestBody ChatfuelRequest req) {
-        System.out.println("getting req");
-        System.out.println(req.getId());
-        System.out.println(req);
-        //String jsonString = req.getParameter("json");
-
-        return "{\n" +
-                "  \"messages\": [\n" +
-                "    {\n" +
-                "      \"attachment\": {\n" +
-                "        \"type\": \"video\",\n" +
-                "        \"payload\": {\n" +
-                "          \"url\": \"https://rockets.chatfuel.com/assets/video.mp4\"\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-    }
+//    @PostMapping("test")
+//    public String tryPost(@RequestBody ChatfuelRequest req) {
+//        System.out.println("getting req");
+//        System.out.println(req.getId());
+//        System.out.println(req);
+//        //String jsonString = req.getParameter("json");
+//
+//        return "{\n" +
+//                "  \"messages\": [\n" +
+//                "    {\n" +
+//                "      \"attachment\": {\n" +
+//                "        \"type\": \"video\",\n" +
+//                "        \"payload\": {\n" +
+//                "          \"url\": \"https://rockets.chatfuel.com/assets/video.mp4\"\n" +
+//                "        }\n" +
+//                "      }\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "}";
+//    }
 
 
     @PostMapping("test/list")

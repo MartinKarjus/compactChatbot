@@ -1,7 +1,5 @@
 package dao;
 
-import objects.shared.PlanAccomplished;
-import objects.shared.TimeAsString;
 import objects.shared.TimeToSend;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +16,7 @@ public class TimeDao {
         return entityManager.createQuery("select timeToSend from TimeToSend timeToSend", TimeToSend.class).getResultList();
     }
 
-    public List<TimeAsString> getAllTimesAsString() {
-        return entityManager.createQuery("select timeAsString from TimeAsString timeAsString", TimeAsString.class).getResultList();
-    }
+//    public List<TimeAsString> getAllTimesAsString() {
+//        return entityManager.createQuery("select timeAsString from TimeAsString timeAsString", TimeAsString.class).getResultList();
+//    }
 }

@@ -4,8 +4,9 @@ package objects.shared;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
-@Entity
+@Entity(name = "Plan")
 @Data
 @Table(name = "plan")
 public class Plan {
@@ -14,16 +15,22 @@ public class Plan {
     @SequenceGenerator(name = "plan_seq", sequenceName = "plan_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "content_id")
-    private Long contentId;
+    @Column(name = "date_created")
+    private Timestamp date_created;
+
+    @Column(name = "date_modified")
+    private Timestamp date_modified;
+
+    @Column(name = "question_id")
+    private Long question_id;
 
     @Column(name = "time_to_send_id")
-    private Long timeToSendId;
+    private Long time_to_send_id;
 
     @Column(name = "day")
     private Long day;
 
-    @Column(name = "usergroup_id")
-    private Long usergroupId;
+    @Column(name = "company_id")
+    private Long company_id;
 
 }
