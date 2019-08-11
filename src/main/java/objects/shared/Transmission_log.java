@@ -6,9 +6,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "Answers")
+@Entity
 @Data
-@Table(name = "answers")
+@Table(name = "transmission_log")
 public class Transmission_log {
 
     @Id

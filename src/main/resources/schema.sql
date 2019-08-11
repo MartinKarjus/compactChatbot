@@ -27,6 +27,9 @@ CREATE
     SEQUENCE platform_sequence AS INTEGER START
     WITH 1;
 CREATE
+    SEQUENCE platform_to_user_sequence AS INTEGER START
+    WITH 1;
+CREATE
     SEQUENCE platform_to_company_sequence AS INTEGER START
     WITH 1;
 CREATE
@@ -34,6 +37,12 @@ CREATE
     WITH 1;
 CREATE
     SEQUENCE answers_sequence AS INTEGER START
+    WITH 1;
+CREATE
+    SEQUENCE question_group_sequence AS INTEGER START
+    WITH 1;
+CREATE
+    SEQUENCE question_sequence AS INTEGER START
     WITH 1;
 
 CREATE
@@ -151,7 +160,7 @@ CREATE TABLE public.user (
      date_created TIMESTAMP,
      date_modified TIMESTAMP,
      gender VARCHAR(10),
-     birtdate TIMESTAMP,
+     birthdate TIMESTAMP,
      email VARCHAR(200),
      team_id BIGINT,
      company BIGINT NOT NULL,

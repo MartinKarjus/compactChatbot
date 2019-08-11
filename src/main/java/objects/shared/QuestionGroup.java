@@ -13,7 +13,7 @@ public class QuestionGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_group_seq")
-    @SequenceGenerator(name = "question_roup_seq", sequenceName = "question_roup_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "question_group_seq", sequenceName = "question_group_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "name")
