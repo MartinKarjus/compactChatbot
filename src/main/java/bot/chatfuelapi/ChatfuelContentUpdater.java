@@ -3,12 +3,14 @@ package bot.chatfuelapi;
 import dao.ContentDao;
 import dao.PlanDao;
 import dao.UserDao;
-import objects.shared.*;
+import objects.shared.Plan;
+import objects.shared.PlanAccomplished;
+import objects.shared.QuestionGroup;
+import objects.shared.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class ChatfuelContentUpdater {
@@ -28,11 +30,11 @@ public class ChatfuelContentUpdater {
     ChatfuelContentMaker chatfuelContentMaker;
 
     private List<User> chatfuelUsers;
-    private List<Usergroup> usergroups;
-    private List<Content> contentForToday;
+    private List<QuestionGroup> questionGroups;
+//    private List<Content> contentForToday;
     private List<Plan> plansForToday;
     private List<PlanAccomplished> accomplishedPlans;
-    private Map<Plan, Content> planToContent;
+//    private Map<Plan, Content> planToContent;
 
 
     // shouldnt need to do it on each update call(once per day?)

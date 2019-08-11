@@ -4,6 +4,7 @@ package objects.shared;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity(name = "Answers")
 @Data
@@ -17,6 +18,9 @@ public class Answers {
 
     @Column(name = "question_id")
     private Long question_id;
+
+    @Column(name = "date_created")
+    private Timestamp dateCreated;
 
     @Column(name = "user_id")
     private Long user_id;

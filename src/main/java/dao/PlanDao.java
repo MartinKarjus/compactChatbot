@@ -19,10 +19,10 @@ public class PlanDao {
         return entityManager.createQuery("select pa from PlanAccomplished pa", PlanAccomplished.class).getResultList();
     }
 
-    public List<Plan> getPlanForDay(List<Long> daysForUsergroups, List<Usergroup> usergroups) {
-        List<Long> ids = usergroups
+    public List<Plan> getPlanForDay(List<Long> daysForUsergroups, List<QuestionGroup> questionGroups) {
+        List<Long> ids = questionGroups
                 .stream()
-                .map(Usergroup::getId)
+                .map(QuestionGroup::getId)
                 .collect(Collectors.toList());
 
         TypedQuery<Plan> query = entityManager.createQuery(
