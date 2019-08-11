@@ -1,9 +1,12 @@
 package controller;
 
 import bot.chatfuelapi.ChatfuelContentUpdater;
-import dao.BotUserDao;
+import dao.AnswersDao;
+import dao.UserDao;
+import objects.chatfuel.ChatfuelRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -14,20 +17,22 @@ public class ChatfuelController {
     private ChatfuelContentUpdater contentUpdater;
 
     @Autowired
-    private BotUserDao botUserDao;
+    private UserDao userDao;
 
-    @GetMapping("chatfuel/update")
-    public String chatfuelUpdate() {
-        contentUpdater.updateUsers();
+    @Autowired
+    private AnswersDao answersDao;
 
-        System.out.println("checking users, sending new msges if needed");
+    @PostMapping("/chatfuel/answer")
+    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
+        System.out.println("Getting request");
+        System.out.println(request.getId());
+        System.out.println(request);
+
         return "{\n" +
                 " \"messages\": [\n" +
                 "   {\"text\": \"Users updated\"},\n" +
                 " ]\n" +
                 "}";
     }
-
-
 
 }
