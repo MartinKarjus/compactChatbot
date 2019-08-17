@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ChatfuelAttachment {
     private String type; // video/template/audio/file
-    private ChatfuelAttachmentPayload payload;
+    private ChatfuelPayload payload;
 
 }

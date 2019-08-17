@@ -10,6 +10,7 @@ public class ChatfuelAttachmentElement {
     @JsonProperty("media_type")
     String mediaType;
     String url;
+    @JsonProperty("image_url")
     String imageUrl;
     String subtitle;
     String title;

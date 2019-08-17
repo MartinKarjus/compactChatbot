@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -19,10 +19,10 @@ public class Question {
     private Long id;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "date_modified")
-    private Timestamp date_modified;
+    private Timestamp dateModified;
 
     @Column(name = "name")
     private String name;

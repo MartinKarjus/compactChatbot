@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -20,13 +20,13 @@ public class QuestionGroup {
     private String name;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "date_modified")
-    private Timestamp date_modified;
+    private Timestamp dateModified;
 
     @Column(name = "company_id")
-    private Long company_id;
+    private Long companyId;
 
 
 }

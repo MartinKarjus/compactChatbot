@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -18,8 +18,8 @@ public class TimeToSend {
     private Long id;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "time_to_send")
-    private Date time_to_send;
+    private Date timeToSend;
 }

@@ -1,6 +1,6 @@
 package dao;
 
-import objects.shared.TimeToSend;
+import objects.dbentities.TimeToSend;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

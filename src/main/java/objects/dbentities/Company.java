@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -17,7 +17,7 @@ public class Company {
     private Long id;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "name")
     private String name;

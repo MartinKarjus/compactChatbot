@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -17,13 +17,13 @@ public class Answers {
     private Long id;
 
     @Column(name = "question_id")
-    private Long question_id;
+    private Long questionId;
 
     @Column(name = "date_created")
     private Timestamp dateCreated;
 
     @Column(name = "user_id")
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "points")
     private Long points;

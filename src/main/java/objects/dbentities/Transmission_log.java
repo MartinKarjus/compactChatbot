@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -17,10 +17,10 @@ public class Transmission_log {
     private Long id;
 
     @Column(name = "question_id")
-    private Long question_id;
+    private Long questionId;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "state")
     private String state;

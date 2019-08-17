@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 
 import lombok.Data;
@@ -23,10 +23,10 @@ public class User {
     private String lastname;
 
     @Column(name = "date_created")
-    private Timestamp date_created;
+    private Timestamp dateCreated;
 
     @Column(name = "date_modified")
-    private Timestamp date_modified;
+    private Timestamp dateModified;
 
     @Column(name = "gender")
     private String gender;
@@ -38,16 +38,16 @@ public class User {
     private String email;
 
     @Column(name = "team_id")
-    private Long team_id;
+    private Long teamId;
 
     @Column(name = "company")
-    private Long company_id;
+    private Long companyId;
 
     @Column(name = "score")
     private Long score;
 
     @Column(name = "question_group_id")
-    private Long question_group_id;
+    private Long questionGroupId;
 
 }
 

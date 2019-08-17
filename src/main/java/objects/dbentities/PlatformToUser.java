@@ -1,4 +1,4 @@
-package objects.shared;
+package objects.dbentities;
 
 import lombok.Data;
 

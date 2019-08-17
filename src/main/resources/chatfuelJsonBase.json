@@ -1,0 +1,48 @@
+{
+  "messages": [
+    {
+      "attachment": {
+        "type": "",
+        "payload": {
+          "template_type": "",
+          "text": "",
+          "top_element_style": "",
+          "url": "",
+          "image_aspect_ratio": "",
+          "buttons": [
+            {
+              "type": "",
+              "title": "",
+              "url": "",
+              "block_names": [],
+              "set_attributes": {}
+            }
+          ],
+          "elements:": [
+            {
+              "media_type": "",
+              "url": "",
+              "image_url": "",
+              "subtitle": "",
+              "title": "",
+              "default_action": {
+                "type": "",
+                "url": "",
+                "messenger_extensions": false
+              },
+              "buttons": [
+                {
+                  "type": "",
+                  "title": "",
+                  "url": "",
+                  "block_names": [],
+                  "set_attributes": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 package dao;
 
 
-import objects.shared.*;
+import objects.dbentities.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
