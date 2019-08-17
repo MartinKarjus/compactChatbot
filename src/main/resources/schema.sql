@@ -62,8 +62,8 @@ CREATE TABLE public.question_group (
    date_created TIMESTAMP,
    date_modified TIMESTAMP,
    company_id BIGINT,
-   FOREIGN KEY (company_id)
-     REFERENCES public.company (id) on DELETE CASCADE
+--    FOREIGN KEY (company_id)
+--      REFERENCES public.company (id) on DELETE CASCADE
 );
 
 CREATE TABLE public.media
@@ -86,8 +86,8 @@ CREATE TABLE public.question
     can_be_random_selected BOOLEAN DEFAULT FALSE,
     leads_to_question_id   BIGINT,
     media_id               BIGINT,
-    FOREIGN KEY (media_id)
-        REFERENCES public.media (id) ON DELETE CASCADE
+--     FOREIGN KEY (media_id)
+--         REFERENCES public.media (id) ON DELETE CASCADE
 );
 
 -- CREATE TABLE main.content
@@ -137,12 +137,12 @@ CREATE TABLE public.plan
     time_to_send_id BIGINT,
     day             BIGINT,
     company_id      BIGINT,
-    FOREIGN KEY (company_id)
-        REFERENCES public.company (id) ON DELETE CASCADE,
-    FOREIGN KEY (question_id)
-        REFERENCES public.question (id) ON DELETE CASCADE,
-    FOREIGN KEY (time_to_send_id)
-        REFERENCES public.time_to_send (id) ON DELETE CASCADE
+--     FOREIGN KEY (company_id)
+--         REFERENCES public.company (id) ON DELETE CASCADE,
+--     FOREIGN KEY (question_id)
+--         REFERENCES public.question (id) ON DELETE CASCADE,
+--     FOREIGN KEY (time_to_send_id)
+--         REFERENCES public.time_to_send (id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.team (
@@ -166,12 +166,12 @@ CREATE TABLE public.user (
      company BIGINT NOT NULL,
      score BIGINT,
      question_group_id BIGINT NOT NULL,
-     FOREIGN KEY (question_group_id)
-       REFERENCES public.question_group ON DELETE CASCADE,
-     FOREIGN KEY (team_id)
-       REFERENCES public.team ON DELETE CASCADE,
-     FOREIGN KEY (company)
-       REFERENCES public.company ON DELETE CASCADE
+--      FOREIGN KEY (question_group_id)
+--        REFERENCES public.question_group ON DELETE CASCADE,
+--      FOREIGN KEY (team_id)
+--        REFERENCES public.team ON DELETE CASCADE,
+--      FOREIGN KEY (company)
+--        REFERENCES public.company ON DELETE CASCADE
 );
 
 CREATE TABLE public.plan_accomplished
@@ -180,10 +180,10 @@ CREATE TABLE public.plan_accomplished
     date_created TIMESTAMP,
     user_id      BIGINT,
     plan_id      BIGINT,
-    FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
-    FOREIGN KEY (plan_id)
-        REFERENCES public.plan (id) ON DELETE CASCADE
+--     FOREIGN KEY (user_id)
+--         REFERENCES public.user (id) ON DELETE CASCADE,
+--     FOREIGN KEY (plan_id)
+--         REFERENCES public.plan (id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.transmission_log
@@ -193,24 +193,24 @@ CREATE TABLE public.transmission_log
   date_created TIMESTAMP,
   user_id BIGINT,
   state VARCHAR(250),
-  FOREIGN KEY (user_id)
-    REFERENCES public.user (id) on DELETE CASCADE,
-  FOREIGN KEY (question_id)
-    REFERENCES public.question (id) ON DELETE CASCADE
+--   FOREIGN KEY (user_id)
+--     REFERENCES public.user (id) on DELETE CASCADE,
+--   FOREIGN KEY (question_id)
+--     REFERENCES public.question (id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.answers
 (
-    id                BIGINT NOT NULL PRIMARY KEY,
+    id                BIGINT PRIMARY KEY,
     question_id BIGINT,
     date_created      TIMESTAMP,
     user_id           BIGINT,
     points            BIGINT,
     answer            VARCHAR(250),
-    FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
-    FOREIGN KEY (question_id)
-        REFERENCES public.question (id) ON DELETE CASCADE
+    --FOREIGN KEY (user_id)
+    --    REFERENCES public.user (id) ON DELETE CASCADE,
+    --FOREIGN KEY (question_id)
+    --   REFERENCES public.question (id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.platform(
@@ -223,8 +223,8 @@ CREATE TABLE public.platform_to_user
     id                    BIGINT NOT NULL PRIMARY KEY,
     user_id            BIGINT,
     platform_id           BIGINT,
-    FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
-    FOREIGN KEY (platform_id)
-        REFERENCES public.platform (id) ON DELETE CASCADE
+--     FOREIGN KEY (user_id)
+--         REFERENCES public.user (id) ON DELETE CASCADE,
+--     FOREIGN KEY (platform_id)
+--         REFERENCES public.platform (id) ON DELETE CASCADE
 );
