@@ -3,15 +3,11 @@ package bot.chatfuelapi;
 
 import dao.QuestionDao;
 import dao.TimeDao;
-import objects.shared.Plan;
-import objects.shared.TimeToSend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+//import objects.shared.Plan;
+//import objects.shared.TimeToSend;
 
 @Component
 public class ChatfuelContentMaker {
@@ -23,8 +19,8 @@ public class ChatfuelContentMaker {
 
 
 //    private List<TimeAsString> timesAsStrings = new ArrayList<>();
-    private List<TimeToSend> timesToSend = new ArrayList<>();
-    private Map<Plan, TimeToSend> planTimeToSend = new HashMap<>();
+//    private List<TimeToSend> timesToSend = new ArrayList<>();
+//    private Map<Plan, TimeToSend> planTimeToSend = new HashMap<>();
 //    private Map<TimeToSend, TimeAsString> timeToSendToTimeAsString = new HashMap<>();
 
 
@@ -46,10 +42,10 @@ public class ChatfuelContentMaker {
         return false;
     }
 
-    private Plan choosePlan(List<Plan> plans) {
+//    private Plan choosePlan(List<Plan> plans) {
         //todo continue
-        return null;
-    }
+//        return null;
+//    }
 
 
 //    public void sendContent(BotUser user, List<Plan> plans) {
