@@ -1,0 +1,25 @@
+{
+  "messages": [
+    {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": "Hello!\n If you would like to learn more about the compact chatbot, you can visit our website or you can start right away!",
+          "buttons": [
+            {
+              "type": "web_url",
+              "url": "https://compact.ee",
+              "title": "Learn more"
+            },
+            {
+              "url": "http://89.235.208.34:8080/api/test",
+              "type": "json_plugin_url",
+              "title": "Start!"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

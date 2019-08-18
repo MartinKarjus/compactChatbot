@@ -1,4 +1,4 @@
--- DROP SCHEMA PUBLIC CASCADE;
+DROP SCHEMA PUBLIC CASCADE;
 
 -- CREATE SCHEMA public;
 
@@ -62,6 +62,7 @@ CREATE TABLE public.question_group (
    date_created TIMESTAMP,
    date_modified TIMESTAMP,
    company_id BIGINT,
+   -- active BOOLEAN -- if groups finish we will want to keep their info to archive it but stop sending content
    FOREIGN KEY (company_id)
      REFERENCES public.company (id) on DELETE CASCADE
 );
@@ -77,6 +78,8 @@ CREATE TABLE public.media
 
 CREATE TABLE public.question
 (
+-- we probably need a diffrent unique identifier to match questions so leads_to_question points to that instead(name?)
+--  beucase it would make adding content difficult
     id                     BIGINT NOT NULL PRIMARY KEY,
     date_created           TIMESTAMP,
     date_modified          TIMESTAMP,
@@ -125,7 +128,7 @@ CREATE TABLE public.time_to_send
 (
     id                BIGINT NOT NULL PRIMARY KEY,
     date_created      TIMESTAMP,
-    time_to_send      DATE
+    time_to_send      DATETIME
 );
 
 CREATE TABLE public.plan
@@ -137,6 +140,9 @@ CREATE TABLE public.plan
     time_to_send_id BIGINT,
     day             BIGINT,
     company_id      BIGINT,
+    -- question_group_id BIGINT
+    -- we will have unique plans for groups so we could have one default content(question_group_id NULL = default)
+    --      but we will need to add this ID for unique content i think?
     FOREIGN KEY (company_id)
         REFERENCES public.company (id) ON DELETE CASCADE,
     FOREIGN KEY (question_id)
@@ -163,9 +169,10 @@ CREATE TABLE public.user (
      birthdate TIMESTAMP,
      email VARCHAR(200),
      team_id BIGINT,
-     company BIGINT NOT NULL,
+     company BIGINT,
      score BIGINT,
      question_group_id BIGINT NOT NULL,
+     -- active BOOLEAN -- individual users will want to leave service but we want to keep their data(archive later)
      FOREIGN KEY (question_group_id)
        REFERENCES public.question_group ON DELETE CASCADE,
      FOREIGN KEY (team_id)
@@ -180,6 +187,7 @@ CREATE TABLE public.plan_accomplished
     date_created TIMESTAMP,
     user_id      BIGINT,
     plan_id      BIGINT,
+    -- content_sent BOOLEAN
     FOREIGN KEY (user_id)
         REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (plan_id)
@@ -223,6 +231,7 @@ CREATE TABLE public.platform_to_user
     id                    BIGINT NOT NULL PRIMARY KEY,
     user_id            BIGINT,
     platform_id           BIGINT,
+    platform_specific_data VARCHAR(500),
     FOREIGN KEY (user_id)
         REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (platform_id)

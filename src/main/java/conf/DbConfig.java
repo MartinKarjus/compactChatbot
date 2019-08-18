@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"dao", "bot"})
+@ComponentScan(basePackages = {"db.dao", "bot"})
 @PropertySource("classpath:/application.properties")
 public class DbConfig {
 

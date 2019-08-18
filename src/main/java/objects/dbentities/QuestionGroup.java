@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "Question_Group")
+@Entity(name = "QuestionGroup")
 @Data
 @Table(name = "question_group")
 public class QuestionGroup {

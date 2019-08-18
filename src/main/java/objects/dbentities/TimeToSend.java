@@ -4,7 +4,6 @@ package objects.dbentities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 
@@ -21,5 +20,5 @@ public class TimeToSend {
     private Timestamp dateCreated;
 
     @Column(name = "time_to_send")
-    private Date timeToSend;
+    private Timestamp timeToSend;
 }
