@@ -3,22 +3,17 @@ package bot.chatfuelapi;
 
 import bot.update.ContentUpdater;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import db.dao.PlatformDao;
 import db.repository.PlanAccomplishedRepository;
 import objects.chatfuel.ChatfuelResponse;
 import objects.dbentities.*;
 import objects.shared.ContentByPlatform;
-import objects.shared.ContentRequestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-@Component
+@Service
 public class ChatfuelContentSender {
 
     @Autowired
@@ -34,7 +29,7 @@ public class ChatfuelContentSender {
     private PlanAccomplishedRepository planAccomplishedRepository;
 
     @Autowired
-    private ChatfuelUserManager chatfuelUserManager;
+    private AsyncBroadcast asyncBroadcast;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -54,17 +49,7 @@ public class ChatfuelContentSender {
         broadcaster.broadcastBlockToUser(platformToUser.getPlatformSpecificData(), env.getProperty("chatfuel_update_block"), null);
     }
 
-    @Async
-    void broadcastNextQuestion(String chatfuelUserId, String questionId) {
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put(env.getProperty("chatfuel_question_id_attribute_name"), questionId);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        broadcaster.broadcastBlockToUser(chatfuelUserId, env.getProperty("chatfuel_specific_content_block"), attributes);
-    }
+
 
 
     //todo add logging
@@ -73,15 +58,17 @@ public class ChatfuelContentSender {
         Question question = contentUpdater.getQuestionsById().get(questionId);
         ContentByPlatform contentByPlatform = null;
         try {
-             contentByPlatform = getContentByPlatform(question.getText());
+            contentByPlatform = getContentByPlatform(question.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(question.getLeadsToQuestionId() == null) {
-            broadcastNextQuestion(chatfuelUserId, String.valueOf(question.getLeadsToQuestionId()));
-        }
+        asyncBroadcast.cake();
 
+        if (question.getLeadsToQuestionId() != null) {
+            asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(question.getLeadsToQuestionId()));
+        }
+        System.out.println("past aSync");
         return contentByPlatform.getChatfuelResponse();
     }
 
@@ -102,7 +89,7 @@ public class ChatfuelContentSender {
     }
 
 
-    public ChatfuelResponse getChatfuelContentByQuestionId(User user, String questionId, String chatfuelUserId) {
-        return getContentAndScheduleFollowup(user, Long.valueOf(questionId), true, chatfuelUserId);
+    public ChatfuelResponse getChatfuelContentByQuestionId(User user, Long questionId, String chatfuelUserId) {
+        return getContentAndScheduleFollowup(user, questionId, true, chatfuelUserId);
     }
 }

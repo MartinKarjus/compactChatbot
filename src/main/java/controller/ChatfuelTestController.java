@@ -1,7 +1,6 @@
 package controller;
 
 
-
 import bot.ContentSender;
 import bot.chatfuelapi.ChatfuelBroadcaster;
 import bot.chatfuelapi.ChatfuelContentSender;
@@ -75,12 +74,13 @@ public class ChatfuelTestController {
 
     @PostMapping("chatfuel/getInitial")
     public ChatfuelResponse getInitial(@RequestBody ChatfuelRegistrationRequest req) throws IOException {
-        if(!init) {
+        if (!init) {
             init();
         }
-        System.out.println("user id is:");
-        System.out.println(req.getChatfuelUserId());
+        System.out.println("user id is: " + req.getChatfuelUserId());
+        System.out.println("user first and lastnames are: " + req.getFirstName() + " " + req.getLastName());
         // my id: 2449441191741397
+        // marie id: 2518988008117216
         User user = new User();
         user.setFirstName(req.getFirstName());
         user.setLastname(req.getLastName());
@@ -105,7 +105,7 @@ public class ChatfuelTestController {
 
     @GetMapping("populate")
     public String populate() {
-        if(!init) {
+        if (!init) {
             init();
         }
         contentGenerator.addContent();
@@ -129,21 +129,21 @@ public class ChatfuelTestController {
     }
 
     @PostMapping("test")
-    public String tryPost() {
+    public String tryPost(@RequestBody ChatfuelRegistrationRequest res) {
         System.out.println("test Post");
 
 
         return "{\n" +
                 " \"messages\": [\n" +
-                "   {\"text\": \"This thing\"},\n" +
-                "   {\"text\": \"works\"}\n" +
+                "   {\"text\": \"Name: " + res.getFirstName() + "\"},\n" +
+                "   {\"text\": \"Id: " + res.getChatfuelUserId() + "\"}\n" +
                 " ]\n" +
                 "}";
     }
 
     @GetMapping("testBroadcast")
     public void makeBroadcast() {
-        System.out.println("making broadcast...");
+        System.out.println("\nmaking broadcast...");
         chatfuelBroadcaster.broadcastBlockToUser("2449441191741397", "contentrequester", null);
     }
 
@@ -154,7 +154,7 @@ public class ChatfuelTestController {
         return "{\n" +
                 " \"messages\": [\n" +
                 "   {\"text\": \"User id is\"},\n" +
-                "   {\"text\": \"" + request.getChatfuelUserId()+"\"}\n" +
+                "   {\"text\": \"" + request.getChatfuelUserId() + "\"}\n" +
                 " ]\n" +
                 "}";
     }

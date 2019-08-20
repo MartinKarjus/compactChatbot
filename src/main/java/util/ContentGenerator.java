@@ -62,13 +62,7 @@ public class ContentGenerator {
     }
 
     public void addContent() {
-        Question question = new Question();
-        question.setName("content1");
-        question.setDescription("for testing");
-        question.setText(chatfuelFileContentReader.getContentAsJson("/json/contentForTesting/content2.json"));
-        question.setLeadsToQuestionId(2L);
-        question.setMediaId(1l);
-        questionRepository.save(question);
+
 
         Question question2 = new Question();
         question2.setName("content2");
@@ -76,6 +70,14 @@ public class ContentGenerator {
         question2.setText(chatfuelFileContentReader.getContentAsJson("/json/contentForTesting/content3.json"));
         question2.setMediaId(1L);
         questionRepository.save(question2);
+
+        Question question = new Question();
+        question.setName("content1");
+        question.setDescription("for testing");
+        question.setText(chatfuelFileContentReader.getContentAsJson("/json/contentForTesting/content2.json"));
+        question.setLeadsToQuestionId(2L);
+        question.setMediaId(1l);
+        questionRepository.save(question);
 
         Question question3 = new Question();
         question3.setName("content3");
@@ -94,7 +96,7 @@ public class ContentGenerator {
         timeToSendRepository.save(timeToSend);
 
         TimeToSend timeToSend2 = new TimeToSend();
-        LocalDateTime time2 = LocalDateTime.now().plusMinutes(2);;
+        LocalDateTime time2 = LocalDateTime.now().plusMinutes(1);;
         timeToSend2.setTimeToSend(Timestamp.valueOf(time2));
         timeToSendRepository.save(timeToSend2);
 
@@ -102,7 +104,7 @@ public class ContentGenerator {
 
 
         Plan plan = new Plan();
-        plan.setQuestionId(2L);
+        plan.setQuestionId(3L);
         plan.setTimeToSendId(1L);
         plan.setDay(0L);
         plan.setCompanyId(1L);

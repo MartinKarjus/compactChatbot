@@ -6,10 +6,7 @@ import bot.chatfuelapi.ChatfuelUserManager;
 import bot.update.ContentUpdater;
 import bot.update.UserUpdater;
 import objects.chatfuel.ChatfuelResponse;
-import objects.dbentities.Plan;
-import objects.dbentities.Platform;
-import objects.dbentities.PlatformToUser;
-import objects.dbentities.User;
+import objects.dbentities.*;
 import objects.shared.ContentRequestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,11 +109,31 @@ public class ContentSender {
         return null;
     }
 
+    private void printDb() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n-------------------START---------------------");
+        builder.append("\nusers: " + userUpdater.getUsersById().values());
+        builder.append("\nplatformToUser: " + userUpdater.getUserToPlatformToUser());
+        builder.append("\nplatforms: " + userUpdater.getPlatformById().values());
+        builder.append("\n------------");
+        builder.append("\nplans: " + contentUpdater.getPlansById().values());
+        builder.append("\ntimes: " + contentUpdater.getTimesById().values());
+        builder.append("\nquestions: " + contentUpdater.getQuestionsById().values());
+        for (Question question : contentUpdater.getQuestionsById().values()) {
+            builder.append("\n\t" + question);
+        }
+        builder.append("\nuser id to plans accomplished" + userUpdater.getPlanAccomplishedUserToPlansByIds());
+        builder.append("\n-------------------END-----------------------");
+        System.out.println(builder.toString());
+
+
+    }
+
     //cant send content to chatfuel, need to request it instead
     // so chatfuel users get broadcasted a block here to request content individually instead of actually sending it
     public void sendOutContent() {
         refreshContent(false);
-
+        printDb();
 
         serviceUsers();
     }
@@ -134,8 +151,8 @@ public class ContentSender {
 
     public ChatfuelResponse getContentById(String chatfuelUserId, String questionId) {
         refreshContent(false);
-
-        return chatfuelContentSender.getChatfuelContentByQuestionId(chatfuelUserManager.getUserWithChatfuelUserId(chatfuelUserId), questionId, chatfuelUserId);
+        Long questionIdAsLong = Long.valueOf(questionId);
+        return chatfuelContentSender.getChatfuelContentByQuestionId(chatfuelUserManager.getUserWithChatfuelUserId(chatfuelUserId), questionIdAsLong, chatfuelUserId);
     }
 
 

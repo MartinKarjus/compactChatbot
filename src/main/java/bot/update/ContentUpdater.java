@@ -58,8 +58,6 @@ public class ContentUpdater {
 
         //todo check that plan has correct questiongroupId if we add that
         for (Plan plan : plansById.values()) {
-            System.out.println("plan day is:" + plan.getDay());
-            System.out.println("current day is:" + day);
             if (plan.getDay().equals(day)) {
                 currentDayPlans.add(plan);
             }

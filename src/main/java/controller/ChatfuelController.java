@@ -41,17 +41,20 @@ public class ChatfuelController {
 
 
     @PostMapping("/chatfuel/getcontent")
-    public String chatfuelGetContent(@RequestBody ChatfuelRequest request) throws JsonProcessingException {
+    public ChatfuelResponse chatfuelGetContent(@RequestBody ChatfuelRequest request) throws JsonProcessingException {
+
         if(request.getChatfuelUserId() == null) {
-            throw new IllegalArgumentException("User id cannot be null");
+            throw new IllegalArgumentException("User id cannot be null when getting content for chatfuel");
         }
 
         ChatfuelResponse res = null;
 
         if(request.getQuestionId() == null) {
+            System.out.println("--1--");
             res = (ChatfuelResponse) contentSender.chatfuelContentRequest(request.getChatfuelUserId(), "chatfuel");
             System.out.println("SENDING1:" + res);
         } else {
+            System.out.println("--2--");
             res = contentSender.getContentById(request.getChatfuelUserId(), request.getQuestionId());
             System.out.println("SENDING2:" + res);
 
@@ -64,13 +67,14 @@ public class ChatfuelController {
         System.out.println(str);
         System.out.println(str2);
 
-        return str;
-//        return "{\n" +
-//                " \"messages\": [\n" +
-//                "   {\"text\": \"User id is\"},\n" +
-//                "   {\"text\": \"" + request.getChatfuelUserId()+"\"}\n" +
-//                " ]\n" +
-//                "}";
+        return res;
+    }
+
+    @GetMapping("/chatfuel/getContent")
+    public void getContent() {
+        System.out.println("\ngetting content");
+
+        contentSender.sendOutContent();
     }
 
 

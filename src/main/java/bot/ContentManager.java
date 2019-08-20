@@ -68,8 +68,6 @@ public class ContentManager {
 
         for (User user : userUpdater.getUsersById().values()) {
             List<Plan> plans = filterOutSentContent(user, contentUpdater.getContentForQuestionGroupForDay(user.getQuestionGroupId()));
-            System.out.println("the plans before:" + contentUpdater.getContentForQuestionGroupForDay(user.getQuestionGroupId()));
-            System.out.println("the plans are:" + plans);
             plans = filterOutContentForLater(plans);
             contentToSendToUsers.put(user, plans);
         }

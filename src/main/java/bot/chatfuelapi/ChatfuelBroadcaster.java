@@ -8,12 +8,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Map;
 
-@Component
+@Service
 public class ChatfuelBroadcaster {
     //todo For chatfuel max broadcasts per second is 25, we need to use scheduling(taskexecutor in spring?) to prevent overload
     // (we make a fairly big number of broadcasts per user and they could happen at the same time)

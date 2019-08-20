@@ -21,12 +21,13 @@ public class ChatfuelUserManager {
 
     public User getUserWithChatfuelUserId(String chatfuelId) {
         //easier to do with a db request i guess but i didnt have any data to test on when i made this
-        System.out.println("id:" + chatfuelId);
-        System.out.println("map:" + userUpdater.getUserToPlatformToUser());
+        System.out.println("chatfuel user id is: " + chatfuelId);
+        System.out.println("user to platform map: " +userUpdater.getUserToPlatformToUser());
         for (Map.Entry<Long, List<PlatformToUser>> entry : userUpdater.getUserToPlatformToUser().entrySet()) {
             for (PlatformToUser platformToUser : entry.getValue()) {
+                System.out.println("specific data: " + platformToUser.getPlatformSpecificData());
                 if (platformToUser.getPlatformSpecificData().equals(chatfuelId)
-                        && userUpdater.getPlatformById().get(platformToUser.getId()).getName().equals("chatfuel")) {
+                        && userUpdater.getPlatformById().get(platformToUser.getPlatformId()).getName().equals("chatfuel")) {
                     return userUpdater.getUsersById().get(platformToUser.getUserId());
                 }
             }
