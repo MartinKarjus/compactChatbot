@@ -69,6 +69,8 @@ dependencies {
     annotationProcessor group: 'org.projectlombok',
             name: 'lombok',
             version: '1.18.2'
+
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.1.10.RELEASE'
 }
 
 

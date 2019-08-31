@@ -1,9 +1,17 @@
 package objects.chatfuel;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatfuelRequest {
+    @JsonProperty("user_id")
+    private String chatfuelUserId;
     private String messenger_user_id;
     private String first_name;
     private String last_name;
@@ -27,51 +35,9 @@ public class ChatfuelRequest {
         return first_name;
     }
 
-    public String getLast_name() {
-        return last_name;
-    }
+    @JsonProperty("question_id")
+    private String questionId;
 
-    public String getGender() {
-        return gender;
-    }
-
-    public String getProfile_pic_url() {
-        return profile_pic_url;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public String getLast_seen() {
-        return last_seen;
-    }
-
-    public String getSigned_up() {
-        return signed_up;
-    }
-
-    public String getSessions() {
-        return sessions;
-    }
-
-    public String getLast_visited_block_name() {
-        return last_visited_block_name;
-    }
-
-    public String getLast_visited_block_id() {
-        return last_visited_block_id;
-    }
-
-    public String getLast_clicked_button_name() {
-        return last_clicked_button_name;
-    }
+    @JsonProperty("token")
+    private String token;
 }

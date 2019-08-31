@@ -1,6 +1,7 @@
 package objects.dbentities;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -48,6 +49,9 @@ public class User {
 
     @Column(name = "question_group_id")
     private Long questionGroupId;
+
+    @Column(name = "active")
+    private boolean active;
 
 }
 

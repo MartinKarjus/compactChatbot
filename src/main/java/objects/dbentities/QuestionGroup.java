@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "Question_Group")
+@Entity(name = "QuestionGroup")
 @Data
 @Table(name = "question_group")
 public class QuestionGroup {
@@ -27,6 +27,9 @@ public class QuestionGroup {
 
     @Column(name = "company_id")
     private Long companyId;
+
+    @Column(name = "active")
+    private boolean active;
 
 
 }

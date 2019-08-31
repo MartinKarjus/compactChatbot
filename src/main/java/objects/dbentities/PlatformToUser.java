@@ -16,11 +16,13 @@ public class PlatformToUser {
     private Long id;
 
     @Column(name = "user_id")
-    private Long usergroupId;
+    private Long userId;
 
     @Column(name = "platform_id")
     private Long platformId;
 
+    @Column(name = "platform_specific_data")
+    private String platformSpecificData;
 
 }
 

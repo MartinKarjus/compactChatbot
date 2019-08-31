@@ -1,13 +1,23 @@
 package controller;
 
-//import bot.ContentSender;
-import dao.UserDao;
+
+import bot.ContentSender;
+import bot.chatfuelapi.ChatfuelBroadcaster;
+import bot.chatfuelapi.ChatfuelContentSender;
+import db.dao.UserDao;
+import db.repository.PlatformToUserRepository;
+import db.repository.QuestionRepository;
+import db.repository.UserRepository;
+import objects.chatfuel.ChatfuelRegistrationRequest;
+import objects.chatfuel.ChatfuelRequest;
 import objects.chatfuel.ChatfuelResponse;
+import objects.dbentities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import util.ContentGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class ChatfuelTestController {
@@ -15,16 +25,95 @@ public class ChatfuelTestController {
     @Autowired
     private UserDao userDao;
 
-//    @Autowired
-//    private ContentSender contentSender;
+    @Autowired
+    private UserRepository userRepository;
 
-    @GetMapping("test")
-    public String tryGet() {
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private PlatformToUserRepository platformToUserRepository;
+
+    @Autowired
+    private ChatfuelBroadcaster chatfuelBroadcaster;
+
+    @Autowired
+    private ContentSender contentSender;
+
+    @Autowired
+    private ChatfuelContentSender chatfuelContentSender;
+
+    @Autowired
+    private ContentGenerator contentGenerator;
+
+
+
+
+
+    @GetMapping("test/{a}")
+    public String tryGet(@PathVariable(value="a") String id) {
         System.out.println("test Get");
+        System.out.println("id:" + id);
+
         return "{\n" +
                 " \"messages\": [\n" +
                 "   {\"text\": \"This thing\"},\n" +
-                "   {\"text\": \"Actually works\"}\n" +
+                "   {\"text\": \"works\"}\n" +
+                " ]\n" +
+                "}";
+    }
+
+    @PostMapping("test/{a}")
+    public String tryPost(@RequestBody ChatfuelRegistrationRequest res, @PathVariable(value="a") String id) {
+        System.out.println("test Post");
+        System.out.println("id:" + id);
+
+
+        return "{\n" +
+                " \"messages\": [\n" +
+                "   {\"text\": \"Name: " + res.getFirstName() + "\"},\n" +
+                "   {\"text\": \"Id: " + res.getChatfuelUserId() + "\"}\n" +
+                " ]\n" +
+                "}";
+    }
+
+    @GetMapping("testBroadcast")
+    public void makeBroadcast() {
+        System.out.println("\nmaking broadcast...");
+        chatfuelBroadcaster.broadcastBlockToUser("2449441191741397", "contentrequester", null);
+    }
+
+    @PostMapping("chatfuel/id")
+    public String chatfuelGetId(@RequestBody ChatfuelRequest request) {
+        System.out.println("user id is:");
+        System.out.println(request.getChatfuelUserId());
+        return "{\n" +
+                " \"messages\": [\n" +
+                "   {\"text\": \"User id is\"},\n" +
+                "   {\"text\": \"" + request.getChatfuelUserId() + "\"}\n" +
+                " ]\n" +
+                "}";
+    }
+
+
+    @PostMapping("/chatfuel/answer")
+    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
+        System.out.println("Getting request");
+        System.out.println(request.getChatfuelUserId());
+        System.out.println(request);
+        User user = new User();
+        user.setFirstName("firstName");
+        user.setLastname("lastname");
+        user.setQuestionGroupId(1L);
+
+
+        userRepository.save(user);
+        List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
+
+        return "{\n" +
+                " \"messages\": [\n" +
+                "   {\"text\": \"User registered, current users: " + users + "\"},\n" +
                 " ]\n" +
                 "}";
     }
