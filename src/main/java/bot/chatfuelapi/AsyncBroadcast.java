@@ -36,3 +36,5 @@ public class AsyncBroadcast {
         broadcaster.broadcastBlockToUser(chatfuelUserId, env.getProperty("chatfuel_specific_content_block"), attributes);
     }
 }
+
+

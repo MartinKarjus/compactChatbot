@@ -22,30 +22,13 @@ import java.util.List;
 @RestController
 public class ChatfuelTestController {
 
-    @Autowired
-    private UserDao userDao;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private PlatformToUserRepository platformToUserRepository;
 
     @Autowired
     private ChatfuelBroadcaster chatfuelBroadcaster;
-
-    @Autowired
-    private ContentSender contentSender;
-
-    @Autowired
-    private ChatfuelContentSender chatfuelContentSender;
-
-    @Autowired
-    private ContentGenerator contentGenerator;
-
 
 
 
@@ -63,10 +46,30 @@ public class ChatfuelTestController {
                 "}";
     }
 
+
     @PostMapping("test/{a}")
-    public String tryPost(@RequestBody ChatfuelRegistrationRequest res, @PathVariable(value="a") String id) {
+    public String cake(@RequestBody String req, @PathVariable(value="a") String id) {
         System.out.println("test Post");
         System.out.println("id:" + id);
+        System.out.println("req is: " + req);
+
+        return "{\n" +
+                " \"messages\": [\n" +
+                "   {\"text\": \"This thing\"},\n" +
+                "   {\"text\": \"works\"}\n" +
+                " ]\n" +
+                "}";
+    }
+
+
+    @PostMapping("test/{userId}/{questionId}/{questionAnswerId}")
+    public String tryPost(@RequestBody ChatfuelRegistrationRequest res,
+                          @PathVariable(value= "userId") String userId,
+                          @PathVariable(value = "questionId") String questionId,
+                          @PathVariable(value = "questionAnswerId") String questionAnswerId) {
+        System.out.println("");
+        System.out.println("test Post");
+        System.out.println("id:" + userId);
 
 
         return "{\n" +
@@ -96,27 +99,27 @@ public class ChatfuelTestController {
     }
 
 
-    @PostMapping("/chatfuel/answer")
-    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
-        System.out.println("Getting request");
-        System.out.println(request.getChatfuelUserId());
-        System.out.println(request);
-        User user = new User();
-        user.setFirstName("firstName");
-        user.setLastname("lastname");
-        user.setQuestionGroupId(1L);
-
-
-        userRepository.save(user);
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-
-        return "{\n" +
-                " \"messages\": [\n" +
-                "   {\"text\": \"User registered, current users: " + users + "\"},\n" +
-                " ]\n" +
-                "}";
-    }
+//    @PostMapping("/chatfuel/answer")
+//    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
+//        System.out.println("Getting request");
+//        System.out.println(request.getChatfuelUserId());
+//        System.out.println(request);
+//        User user = new User();
+//        user.setFirstName("firstName");
+//        user.setLastname("lastname");
+//        user.setQuestionGroupId(1L);
+//
+//
+//        userRepository.save(user);
+//        List<User> users = new ArrayList<>();
+//        userRepository.findAll().forEach(users::add);
+//
+//        return "{\n" +
+//                " \"messages\": [\n" +
+//                "   {\"text\": \"User registered, current users: " + users + "\"},\n" +
+//                " ]\n" +
+//                "}";
+//    }
 
     @GetMapping("sendContent")
     public ChatfuelResponse cake() {
@@ -162,91 +165,91 @@ public class ChatfuelTestController {
 //    }
 
 
-    @PostMapping("test/list")
-    public String tryList(@RequestBody String req) {
-        System.out.println(req);
-        System.out.println("getting req");
-        return "{\n" +
-                " \"messages\": [\n" +
-                "    {\n" +
-                "      \"attachment\":{\n" +
-                "        \"type\":\"template\",\n" +
-                "        \"payload\":{\n" +
-                "          \"template_type\":\"list\",\n" +
-                "          \"top_element_style\":\"large\",\n" +
-                "          \"elements\":[\n" +
-                "            {\n" +
-                "              \"title\":\"Chatfuel Rockets Jersey\",\n" +
-                "              \"image_url\":\"http://rockets.chatfuel.com/assets/shirt.jpg\",\n" +
-                "              \"subtitle\":\"Size: M\",\n" +
-                "              \"buttons\":[\n" +
-                "                {\n" +
-                "                  \"type\":\"web_url\",\n" +
-                "                  \"url\":\"https://rockets.chatfuel.com/store\",\n" +
-                "                  \"title\":\"View Item\"\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"title\":\"Chatfuel Rockets Jersey\",\n" +
-                "              \"image_url\":\"http://rockets.chatfuel.com/assets/shirt.jpg\",\n" +
-                "              \"subtitle\":\"Size: L\",\n" +
-                "              \"default_action\": {\n" +
-                "                \"type\": \"web_url\",\n" +
-                "                \"url\": \"https://rockets.chatfuel.com/store\",\n" +
-                "                \"messenger_extensions\": true\n" +
-                "              },\n" +
-                "              \"buttons\":[\n" +
-                "                {\n" +
-                "                  \"type\":\"web_url\",\n" +
-                "                  \"url\":\"https://rockets.chatfuel.com/store\",\n" +
-                "                  \"title\":\"View Item\"\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-    }
-
-    @PostMapping("test/choice")
-    public String tryChoice(@RequestBody String req) {
-        System.out.println(req);
-        System.out.println("getting req");
-        return "{\n" +
-                "  \"messages\": [\n" +
-                "    {\n" +
-                "      \"attachment\": {\n" +
-                "        \"type\": \"template\",\n" +
-                "        \"payload\": {\n" +
-                "          \"template_type\": \"button\",\n" +
-                "          \"text\": \"Hello!\",\n" +
-                "          \"buttons\": [\n" +
-                "            {\n" +
-                "              \"type\": \"show_block\",\n" +
-                "              \"block_names\": [\"name of block\"],\n" +
-                "              \"title\": \"Show Block\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"type\": \"web_url\",\n" +
-                "              \"url\": \"https://rockets.chatfuel.com\",\n" +
-                "              \"title\": \"Visit Website\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "              \"url\": \"http://89.235.216.116:8080/api/test\",\n" +
-                "              \"type\":\"json_plugin_url\",\n" +
-                "              \"title\":\"Postback\"\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-    }
+//    @PostMapping("test/list")
+//    public String tryList(@RequestBody String req) {
+//        System.out.println(req);
+//        System.out.println("getting req");
+//        return "{\n" +
+//                " \"messages\": [\n" +
+//                "    {\n" +
+//                "      \"attachment\":{\n" +
+//                "        \"type\":\"template\",\n" +
+//                "        \"payload\":{\n" +
+//                "          \"template_type\":\"list\",\n" +
+//                "          \"top_element_style\":\"large\",\n" +
+//                "          \"elements\":[\n" +
+//                "            {\n" +
+//                "              \"title\":\"Chatfuel Rockets Jersey\",\n" +
+//                "              \"image_url\":\"http://rockets.chatfuel.com/assets/shirt.jpg\",\n" +
+//                "              \"subtitle\":\"Size: M\",\n" +
+//                "              \"buttons\":[\n" +
+//                "                {\n" +
+//                "                  \"type\":\"web_url\",\n" +
+//                "                  \"url\":\"https://rockets.chatfuel.com/store\",\n" +
+//                "                  \"title\":\"View Item\"\n" +
+//                "                }\n" +
+//                "              ]\n" +
+//                "            },\n" +
+//                "            {\n" +
+//                "              \"title\":\"Chatfuel Rockets Jersey\",\n" +
+//                "              \"image_url\":\"http://rockets.chatfuel.com/assets/shirt.jpg\",\n" +
+//                "              \"subtitle\":\"Size: L\",\n" +
+//                "              \"default_action\": {\n" +
+//                "                \"type\": \"web_url\",\n" +
+//                "                \"url\": \"https://rockets.chatfuel.com/store\",\n" +
+//                "                \"messenger_extensions\": true\n" +
+//                "              },\n" +
+//                "              \"buttons\":[\n" +
+//                "                {\n" +
+//                "                  \"type\":\"web_url\",\n" +
+//                "                  \"url\":\"https://rockets.chatfuel.com/store\",\n" +
+//                "                  \"title\":\"View Item\"\n" +
+//                "                }\n" +
+//                "              ]\n" +
+//                "            }\n" +
+//                "          ]\n" +
+//                "        }\n" +
+//                "      }\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "}";
+//    }
+//
+//    @PostMapping("test/choice")
+//    public String tryChoice(@RequestBody String req) {
+//        System.out.println(req);
+//        System.out.println("getting req");
+//        return "{\n" +
+//                "  \"messages\": [\n" +
+//                "    {\n" +
+//                "      \"attachment\": {\n" +
+//                "        \"type\": \"template\",\n" +
+//                "        \"payload\": {\n" +
+//                "          \"template_type\": \"button\",\n" +
+//                "          \"text\": \"Hello!\",\n" +
+//                "          \"buttons\": [\n" +
+//                "            {\n" +
+//                "              \"type\": \"show_block\",\n" +
+//                "              \"block_names\": [\"name of block\"],\n" +
+//                "              \"title\": \"Show Block\"\n" +
+//                "            },\n" +
+//                "            {\n" +
+//                "              \"type\": \"web_url\",\n" +
+//                "              \"url\": \"https://rockets.chatfuel.com\",\n" +
+//                "              \"title\": \"Visit Website\"\n" +
+//                "            },\n" +
+//                "            {\n" +
+//                "              \"url\": \"http://89.235.216.116:8080/api/test\",\n" +
+//                "              \"type\":\"json_plugin_url\",\n" +
+//                "              \"title\":\"Postback\"\n" +
+//                "            }\n" +
+//                "          ]\n" +
+//                "        }\n" +
+//                "      }\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "}";
+//    }
 
 
     //@PostMapping("chatfuel/getupdate")
