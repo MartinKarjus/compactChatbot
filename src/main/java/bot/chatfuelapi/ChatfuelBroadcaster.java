@@ -47,6 +47,17 @@ public class ChatfuelBroadcaster {
 //        String response =
 //                template.exchange("url", HttpMethod.POST, requestEntity,
 //                        String.class);
+
+        /*
+        //failure response
+        {
+            "result": "Too many requests: RPS limit reached",
+            "success": false,
+            "errors": ["Too many requests: RPS limit reached"],
+            "message": null
+        }
+
+         */
     }
 
     private String makeUrl(String userId, String blockName, Map<String, String> userAttributes) {
@@ -65,7 +76,7 @@ public class ChatfuelBroadcaster {
 
         if (userAttributes != null) {
             for (Map.Entry<String, String> entry : userAttributes.entrySet()) {
-                if(entry.getKey().startsWith("chatfuel")) {
+                if (entry.getKey().startsWith("chatfuel")) {
                     throw new IllegalArgumentException("Chatfuel user attributes can't start with 'chatfuel' (reserved value by chatfuel)");
                 }
                 stringBuilder

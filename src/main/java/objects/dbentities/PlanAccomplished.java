@@ -26,4 +26,7 @@ public class PlanAccomplished {
     @Column(name = "plan_id")
     private Long planId;
 
+    @Column(name = "content_sent")
+    private boolean contentSent;
+
 }

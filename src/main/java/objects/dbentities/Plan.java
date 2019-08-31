@@ -33,4 +33,7 @@ public class Plan {
     @Column(name = "company_id")
     private Long companyId;
 
+    @Column(name = "question_group_id")
+    private Long questionGroupId;
+
 }

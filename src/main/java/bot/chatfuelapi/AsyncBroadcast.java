@@ -18,16 +18,6 @@ public class AsyncBroadcast {
     @Autowired
     private ChatfuelBroadcaster broadcaster;
 
-    @Async
-    void cake() {
-        System.out.println("async cake");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("async cake end");
-    }
 
     @Async
     void broadcastNextQuestion(String chatfuelUserId, String questionId) {

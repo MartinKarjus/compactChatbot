@@ -4,6 +4,7 @@ package bot.chatfuelapi;
 import bot.update.ContentUpdater;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.repository.PlanAccomplishedRepository;
+import db.repository.TransmissionLogRepository;
 import objects.chatfuel.ChatfuelResponse;
 import objects.dbentities.*;
 import objects.shared.ContentByPlatform;
@@ -30,6 +31,10 @@ public class ChatfuelContentSender {
 
     @Autowired
     private AsyncBroadcast asyncBroadcast;
+
+    @Autowired
+    private TransmissionLogRepository transmissionLogRepository;
+
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -63,12 +68,16 @@ public class ChatfuelContentSender {
             e.printStackTrace();
         }
 
-        asyncBroadcast.cake();
 
         if (question.getLeadsToQuestionId() != null) {
             asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(question.getLeadsToQuestionId()));
         }
         System.out.println("past aSync");
+
+        TransmissionLog t = new TransmissionLog();
+        t.setQuestionId(questionId);
+        t.setUserId(user.getId());
+        transmissionLogRepository.save(t);
         return contentByPlatform.getChatfuelResponse();
     }
 
@@ -79,6 +88,9 @@ public class ChatfuelContentSender {
         // causing the same question to be sent multiple times
         // to fix it, we will need to lock requests for users that are being processed or somehow limit the endpoint.. stuff to think about
         // might also need to move this to some place we get actual confirmation
+
+        //currently we only mass update ourselves and requests are for specific user.. so this might no longer be an issue
+        // going to leave the comment here for now though as we will need to eventually implement it
         PlanAccomplished planAccomplished = new PlanAccomplished();
         planAccomplished.setPlanId(plan.getId());
         planAccomplished.setUserId(user.getId());

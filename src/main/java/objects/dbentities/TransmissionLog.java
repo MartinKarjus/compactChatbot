@@ -24,4 +24,7 @@ public class TransmissionLog {
 
     @Column(name = "state")
     private String state;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

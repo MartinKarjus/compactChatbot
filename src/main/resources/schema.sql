@@ -62,7 +62,7 @@ CREATE TABLE public.question_group (
    date_created TIMESTAMP,
    date_modified TIMESTAMP,
    company_id BIGINT,
-   -- active BOOLEAN -- if groups finish we will want to keep their info to archive it but stop sending content
+   active BOOLEAN, -- if groups finish we will want to keep their info to archive it but stop sending content
    FOREIGN KEY (company_id)
      REFERENCES public.company (id) on DELETE CASCADE
 );
@@ -93,36 +93,6 @@ CREATE TABLE public.question
         REFERENCES public.media (id) ON DELETE CASCADE
 );
 
--- CREATE TABLE main.content
--- (
---     id                   BIGINT NOT NULL PRIMARY KEY,
---     leads_to_content_id  BIGINT,
---     leads_to_question_id BIGINT,
---     text                 VARCHAR(5000),
---     media_id             BIGINT,
---     FOREIGN KEY (leads_to_content_id)
---         REFERENCES main.content (id) ON DELETE CASCADE,
---     FOREIGN KEY (media_id)
---         REFERENCES main.media (id) ON DELETE CASCADE,
---     FOREIGN KEY (leads_to_question_id)
---         REFERENCES main.question (id) ON DELETE CASCADE
--- );
-
--- CREATE TABLE main.question_query
--- (
---     id                  BIGINT NOT NULL PRIMARY KEY,
---     query_text          VARCHAR(5000),
---     query_response      VARCHAR(5000),
---     leads_to_content_id BIGINT,
---     media_id            BIGINT,
---     question_id         BIGINT,
---     FOREIGN KEY (question_id)
---         REFERENCES main.question (id) ON DELETE CASCADE,
---     FOREIGN KEY (leads_to_content_id)
---         REFERENCES main.content (id) ON DELETE CASCADE,
---     FOREIGN KEY (media_id)
---         REFERENCES main.media (id) ON DELETE CASCADE
--- );
 
 CREATE TABLE public.time_to_send
 (
@@ -140,7 +110,7 @@ CREATE TABLE public.plan
     time_to_send_id BIGINT,
     day             BIGINT,
     company_id      BIGINT,
-    -- question_group_id BIGINT
+    question_group_id BIGINT,
     -- we will have unique plans for groups so we could have one default content(question_group_id NULL = default)
     --      but we will need to add this ID for unique content i think?
     FOREIGN KEY (company_id)
@@ -172,7 +142,7 @@ CREATE TABLE public.user (
      company BIGINT,
      score BIGINT,
      question_group_id BIGINT NOT NULL,
-     -- active BOOLEAN -- individual users will want to leave service but we want to keep their data(archive later)
+     active BOOLEAN, -- individual users will want to leave service but we want to keep their data(archive later)
      FOREIGN KEY (question_group_id)
        REFERENCES public.question_group ON DELETE CASCADE,
      FOREIGN KEY (team_id)
@@ -187,7 +157,7 @@ CREATE TABLE public.plan_accomplished
     date_created TIMESTAMP,
     user_id      BIGINT,
     plan_id      BIGINT,
-    -- content_sent BOOLEAN
+    content_sent BOOLEAN,
     FOREIGN KEY (user_id)
         REFERENCES public.user (id) ON DELETE CASCADE,
     FOREIGN KEY (plan_id)

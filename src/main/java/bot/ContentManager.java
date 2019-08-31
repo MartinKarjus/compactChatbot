@@ -29,7 +29,7 @@ public class ContentManager {
     private List<Plan> filterOutSentContent(User user, List<Plan> userGroupPlans) {
         List<Plan> plansToSend = new ArrayList<>();
 
-        if(userUpdater.getPlanAccomplishedUserToPlansByIds().size() == 0) {
+        if (userUpdater.getPlanAccomplishedUserToPlansByIds().size() == 0) {
             plansToSend.addAll(userGroupPlans);
             return plansToSend;
         }
@@ -50,11 +50,12 @@ public class ContentManager {
                 .getTimeToSend().toLocalDateTime().toLocalTime();
     }
 
-    private List<Plan> filterOutContentForLater(List<Plan> userGroupPlans) {
+    private List<Plan> filterOutLaterContentAndUserGroup(List<Plan> userGroupPlans, User u) {
         List<Plan> plansToSend = new ArrayList<>();
 
         for (Plan plan : userGroupPlans) {
-            if (getTimeForPlan(plan).isBefore(LocalTime.now())) {
+            if (getTimeForPlan(plan).isBefore(LocalTime.now())
+                    && plan.getQuestionGroupId().equals(u.getQuestionGroupId())) {
                 plansToSend.add(plan);
             }
         }
@@ -68,7 +69,8 @@ public class ContentManager {
 
         for (User user : userUpdater.getUsersById().values()) {
             List<Plan> plans = filterOutSentContent(user, contentUpdater.getContentForQuestionGroupForDay(user.getQuestionGroupId()));
-            plans = filterOutContentForLater(plans);
+            plans = filterOutLaterContentAndUserGroup(plans, user);
+
             contentToSendToUsers.put(user, plans);
         }
 

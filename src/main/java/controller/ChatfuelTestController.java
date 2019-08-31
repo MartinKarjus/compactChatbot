@@ -5,6 +5,7 @@ import bot.ContentSender;
 import bot.chatfuelapi.ChatfuelBroadcaster;
 import bot.chatfuelapi.ChatfuelContentSender;
 import bot.temp.ChatfuelFileContentReader;
+import bot.temp.TempAwsDbCon;
 import db.dao.UserDao;
 import db.repository.PlatformToUserRepository;
 import db.repository.QuestionRepository;
@@ -53,8 +54,17 @@ public class ChatfuelTestController {
     @Autowired
     private ContentGenerator contentGenerator;
 
+    @Autowired
+    private TempAwsDbCon tempAwsDbCon;
+
 
     private boolean init = false;
+
+    @GetMapping("sendaws")
+    private String testaws() {
+        tempAwsDbCon.readMemDbSaveCopy();
+        return "done";
+    }
 
     @GetMapping("initialize")
     public void init() {
@@ -72,7 +82,7 @@ public class ChatfuelTestController {
 
     }
 
-    @PostMapping("chatfuel/getInitial")
+    @PostMapping("chatfuel/getInitial") // also initializes user
     public ChatfuelResponse getInitial(@RequestBody ChatfuelRegistrationRequest req) throws IOException {
         if (!init) {
             init();
@@ -90,6 +100,7 @@ public class ChatfuelTestController {
         user.setScore(0L);
         User u = userRepository.save(user);
 
+        //todo select platform 'chatfuel' by name, then get id, then tie the user to the id
         PlatformToUser platformToUser = new PlatformToUser();
         platformToUser.setPlatformId(1L);
         platformToUser.setPlatformSpecificData(req.getChatfuelUserId());

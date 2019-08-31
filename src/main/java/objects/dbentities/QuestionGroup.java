@@ -28,5 +28,8 @@ public class QuestionGroup {
     @Column(name = "company_id")
     private Long companyId;
 
+    @Column(name = "active")
+    private boolean active;
+
 
 }
