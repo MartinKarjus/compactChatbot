@@ -19,4 +19,7 @@ public class ChatfuelRegistrationRequest {
 
     @JsonProperty("last_name")
     private String lastName;
+
+    @JsonProperty("token")
+    private String token;
 }

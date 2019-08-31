@@ -15,4 +15,7 @@ public class ChatfuelRequest {
 
     @JsonProperty("question_id")
     private String questionId;
+
+    @JsonProperty("token")
+    private String token;
 }

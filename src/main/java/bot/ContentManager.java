@@ -54,8 +54,8 @@ public class ContentManager {
         List<Plan> plansToSend = new ArrayList<>();
 
         for (Plan plan : userGroupPlans) {
-            if (getTimeForPlan(plan).isBefore(LocalTime.now())
-                    && plan.getQuestionGroupId().equals(u.getQuestionGroupId())) {
+            if (getTimeForPlan(plan).isBefore(LocalTime.now())) { //todo fix
+                    //&& plan.getQuestionGroupId().equals(u.getQuestionGroupId())) {
                 plansToSend.add(plan);
             }
         }
