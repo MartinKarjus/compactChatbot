@@ -8,6 +8,7 @@ import bot.temp.ChatfuelFileContentReader;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import db.dao.AnswersDao;
 import db.dao.UserDao;
 import db.repository.PlatformToUserRepository;
 import db.repository.QuestionRepository;
@@ -28,6 +29,8 @@ import util.ContentGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Timestamp;
+
 
 @RestController
 public class ChatfuelController {
@@ -56,6 +59,9 @@ public class ChatfuelController {
     @Autowired
     private PlatformToUserRepository platformToUserRepository;
 
+    @Autowired
+    private AnswersDao answersDao;
+
 
     private boolean init = false;
 
@@ -76,6 +82,19 @@ public class ChatfuelController {
 
     }
 
+    @PostMapping("/chatfuel/answer")
+    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
+        System.out.println("Getting request");
+        System.out.println(request.getMessenger_user_id());
+        System.out.println(request);
+        answersDao.save(Long.parseLong(request.getLast_visited_block_id()),
+                new Timestamp(System.currentTimeMillis()),
+                Long.parseLong(request.getMessenger_user_id()),
+                Long.parseLong("0"),
+                request.getLast_clicked_button_name());
+
+        return "saved";
+    }
 
 
     @GetMapping("populate")
