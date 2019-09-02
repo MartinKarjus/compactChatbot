@@ -1,4 +1,3 @@
-
 plugins {
     id 'org.gretty' version '2.2.0'
     id 'war'
@@ -13,8 +12,14 @@ sourceCompatibility = 8
 def springVersion = '5.1.0.RELEASE'
 
 
-
 dependencies {
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-aws', version: '2.1.2.RELEASE', ext: 'pom'
+    
+    // https://mvnrepository.com/artifact/postgresql/postgresql
+    compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
+
 
     compile group: 'org.springframework',
             name: 'spring-context',

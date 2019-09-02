@@ -7,7 +7,7 @@ import db.dao.UserDao;
 import objects.dbentities.Platform;
 import objects.dbentities.PlatformToUser;
 import objects.dbentities.QuestionGroup;
-import objects.dbentities.User;
+import objects.dbentities.BotUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class UserUpdater {
     @Autowired
     private PlatformDao platformDao;
 
-    private Map<Long, User> usersById = new HashMap<>();
+    private Map<Long, BotUser> usersById = new HashMap<>();
     private Map<Long, QuestionGroup> groupsById = new HashMap<>();
     private Map<Long, List<Long>> planAccomplishedUserToPlansByIds = new HashMap<>();
     private Map<Long, Platform> platformById = new HashMap<>();
@@ -68,7 +68,7 @@ public class UserUpdater {
     }
 
 
-    public Map<Long, User> getUsersById() {
+    public Map<Long, BotUser> getUsersById() {
         return usersById;
     }
 

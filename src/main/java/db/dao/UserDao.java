@@ -1,6 +1,6 @@
 package db.dao;
 
-import objects.dbentities.User;
+import objects.dbentities.BotUser;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,45 +18,45 @@ public class UserDao {
     @PersistenceContext
     EntityManager entityManager;
 
-    public List<User> getAllUsers() {
-        TypedQuery<User> query = entityManager.createQuery(
-                "SELECT a from User a"
-                , User.class);
+    public List<BotUser> getAllUsers() {
+        TypedQuery<BotUser> query = entityManager.createQuery(
+                "SELECT a from BotUser a"
+                , BotUser.class);
 
         //System.out.println(query.getResultList());
         return query.getResultList();
     }
 
-    public Map<Long, User> getAllUsersById() {
-        HashMap<Long, User> idToUser = new HashMap<>();
-        for (User user : getAllUsers()) {
+    public Map<Long, BotUser> getAllUsersById() {
+        HashMap<Long, BotUser> idToUser = new HashMap<>();
+        for (BotUser user : getAllUsers()) {
             idToUser.put(user.getId(), user);
         }
         return idToUser;
     }
 
     @Transactional
-    public User addUser(User user) {
+    public BotUser addUser(BotUser user) {
         entityManager.persist(user);
         return user;
     }
 
 
-//    public List<User> getAllUsersFromPlatform(String platformName) {
-//        TypedQuery<User> query = entityManager.createQuery(
-//                "select bu from User bu, Platform p, Usergroup ug, PlatformToUsergroup pToUg " +
+//    public List<BotUser> getAllUsersFromPlatform(String platformName) {
+//        TypedQuery<BotUser> query = entityManager.createQuery(
+//                "select bu from BotUser bu, Platform p, Usergroup ug, PlatformToUsergroup pToUg " +
 //                        "where bu.usergroupId = ug.id and p.id = pToUg.platformId and ug.id = pToUg.usergroupId and p.name = :platformName",
-//                User.class);
+//                BotUser.class);
 //
 //        query.setParameter("platformName", platformName);
 //
 //        return query.getResultList();
 //    }
 
-//    public List<Usergroup> getUsergroupsByUsers(List<User> users) {
+//    public List<Usergroup> getUsergroupsByUsers(List<BotUser> users) {
 //        List<Long> ids = users
 //                .stream()
-//                .map(User::getId)
+//                .map(BotUser::getId)
 //                .collect(Collectors.toList());
 //
 //        TypedQuery<Usergroup> query = entityManager.createQuery(

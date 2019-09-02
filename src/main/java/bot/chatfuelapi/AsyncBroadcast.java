@@ -25,7 +25,7 @@ public class AsyncBroadcast {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(env.getProperty("chatfuel_question_id_attribute_name"), questionId);
         try {
-            Thread.sleep(15000);
+            Thread.sleep(15000); // todo change to duration based on text length last sent
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

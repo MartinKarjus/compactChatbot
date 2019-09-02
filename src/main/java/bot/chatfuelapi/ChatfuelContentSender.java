@@ -50,7 +50,7 @@ public class ChatfuelContentSender {
     }
 
 
-    public void broadcastToMakeChatfuelRequestContent(Platform platform, Plan plan, User user, PlatformToUser platformToUser) {
+    public void broadcastToMakeChatfuelRequestContent(Platform platform, Plan plan, BotUser user, PlatformToUser platformToUser) {
         broadcaster.broadcastBlockToUser(platformToUser.getPlatformSpecificData(), env.getProperty("chatfuel_update_block"), null);
     }
 
@@ -59,7 +59,7 @@ public class ChatfuelContentSender {
 
     //todo add logging
     // is followup is for that(only plan based questions get logged into plan accomplished)
-    private ChatfuelResponse getContentAndScheduleFollowup(User user, Long questionId, boolean isFollowup, String chatfuelUserId) {
+    private ChatfuelResponse getContentAndScheduleFollowup(BotUser user, Long questionId, boolean isFollowup, String chatfuelUserId) {
         Question question = contentUpdater.getQuestionsById().get(questionId);
         ContentByPlatform contentByPlatform = null;
         try {
@@ -82,7 +82,7 @@ public class ChatfuelContentSender {
     }
 
 
-    public ChatfuelResponse getChatfuelContent(Platform platform, Plan plan, User user, PlatformToUser platformToUser) {
+    public ChatfuelResponse getChatfuelContent(Platform platform, Plan plan, BotUser user, PlatformToUser platformToUser) {
 
         //todo since spring requests are async, you might Start getting next request before this is actually saved,
         // causing the same question to be sent multiple times
@@ -101,7 +101,7 @@ public class ChatfuelContentSender {
     }
 
 
-    public ChatfuelResponse getChatfuelContentByQuestionId(User user, Long questionId, String chatfuelUserId) {
+    public ChatfuelResponse getChatfuelContentByQuestionId(BotUser user, Long questionId, String chatfuelUserId) {
         return getContentAndScheduleFollowup(user, questionId, true, chatfuelUserId);
     }
 }

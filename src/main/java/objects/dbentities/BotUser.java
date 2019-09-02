@@ -7,10 +7,10 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "User")
+@Entity(name = "BotUser")
 @Data
-@Table(name = "user")
-public class User {
+@Table(name = "bot_user")
+public class BotUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")

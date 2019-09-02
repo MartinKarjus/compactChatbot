@@ -15,7 +15,7 @@ import java.util.Random;
 public class ContentGenerator {
 
     @Autowired
-    private UserRepository userRepository;
+    private BotUserRepository userRepository;
 
     @Autowired
     private AnswersRepository answersRepository;
@@ -76,7 +76,7 @@ public class ContentGenerator {
         question.setDescription("for testing");
         question.setText(chatfuelFileContentReader.getContentAsJson("/json/contentForTesting/content2.json"));
         question.setLeadsToQuestionId(2L);
-        question.setMediaId(1l);
+        question.setMediaId(1L);
         questionRepository.save(question);
 
         Question question3 = new Question();

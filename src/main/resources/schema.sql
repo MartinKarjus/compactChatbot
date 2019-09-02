@@ -129,7 +129,7 @@ CREATE TABLE public.team (
                            score BIGINT
 );
 
-CREATE TABLE public.user (
+CREATE TABLE public.bot_user (
      id BIGINT NOT NULL PRIMARY KEY,
      first_name VARCHAR(200),
      last_name VARCHAR(200),
@@ -159,7 +159,7 @@ CREATE TABLE public.plan_accomplished
     plan_id      BIGINT,
     content_sent BOOLEAN,
     FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
+        REFERENCES public.bot_user (id) ON DELETE CASCADE,
     FOREIGN KEY (plan_id)
         REFERENCES public.plan (id) ON DELETE CASCADE
 );
@@ -172,7 +172,7 @@ CREATE TABLE public.transmission_log
   user_id BIGINT,
   state VARCHAR(250),
   FOREIGN KEY (user_id)
-    REFERENCES public.user (id) on DELETE CASCADE,
+    REFERENCES public.bot_user (id) on DELETE CASCADE,
   FOREIGN KEY (question_id)
     REFERENCES public.question (id) ON DELETE CASCADE
 );
@@ -186,7 +186,7 @@ CREATE TABLE public.answers
     points            BIGINT,
     answer            VARCHAR(250),
     FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
+        REFERENCES public.bot_user (id) ON DELETE CASCADE,
     FOREIGN KEY (question_id)
         REFERENCES public.question (id) ON DELETE CASCADE
 );
@@ -203,7 +203,7 @@ CREATE TABLE public.platform_to_user
     platform_id           BIGINT,
     platform_specific_data VARCHAR(500),
     FOREIGN KEY (user_id)
-        REFERENCES public.user (id) ON DELETE CASCADE,
+        REFERENCES public.bot_user (id) ON DELETE CASCADE,
     FOREIGN KEY (platform_id)
         REFERENCES public.platform (id) ON DELETE CASCADE
 );

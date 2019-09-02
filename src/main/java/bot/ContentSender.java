@@ -54,7 +54,7 @@ public class ContentSender {
 
 
 
-    private void sendContent(User user, Plan plan) {
+    private void sendContent(BotUser user, Plan plan) {
         List<Platform> platformsForUser = contentManager.getPlatformsForUser(user);
         for (Platform platform : platformsForUser) {
             if (platform.getName().equals("chatfuel")) {
@@ -66,7 +66,7 @@ public class ContentSender {
         }
     }
 
-    private ContentRequestResponse getContent(User user, Plan plan, Platform platform) {
+    private ContentRequestResponse getContent(BotUser user, Plan plan, Platform platform) {
         if (platform.getName().equals("chatfuel")) {
             PlatformToUser platformToUser = userUpdater.getPlatformToUserById(user.getId(), platform.getName());
             return chatfuelContentSender.getChatfuelContent(platform, plan, user, platformToUser);
@@ -76,10 +76,10 @@ public class ContentSender {
     }
 
     private void serviceUsers() {
-        Map<User, List<Plan>> contentToSend = contentManager.getUnsentContent();
+        Map<BotUser, List<Plan>> contentToSend = contentManager.getUnsentContent();
 
 
-        for (Map.Entry<User, List<Plan>> entry : contentToSend.entrySet()) {
+        for (Map.Entry<BotUser, List<Plan>> entry : contentToSend.entrySet()) {
             if (entry.getValue().size() > 1) {
                 sendContent(entry.getKey(), contentManager.getLatestToSend(entry.getValue()));
             } else if (entry.getValue().size() == 1) {
@@ -92,7 +92,7 @@ public class ContentSender {
         }
     }
 
-    private ContentRequestResponse serviceUser(User user, String platformName) {
+    private ContentRequestResponse serviceUser(BotUser user, String platformName) {
         List<Plan> plans = contentManager.getUnsentContent().get(user);
         Platform platform = userUpdater.getPlatformByName("chatfuel");//todo change to apply to all platforms
 
@@ -118,7 +118,7 @@ public class ContentSender {
         builder.append("\n------------");
         builder.append("\nplans: " + contentUpdater.getPlansById().values());
         builder.append("\ntimes: " + contentUpdater.getTimesById().values());
-        builder.append("\nquestions: " + contentUpdater.getQuestionsById().values());
+        builder.append("\nquestions: ");
         for (Question question : contentUpdater.getQuestionsById().values()) {
             builder.append("\n\t" + question);
         }

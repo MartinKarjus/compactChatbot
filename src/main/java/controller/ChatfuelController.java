@@ -10,15 +10,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.dao.AnswersDao;
 import db.dao.UserDao;
+import db.repository.PlatformRepository;
 import db.repository.PlatformToUserRepository;
 import db.repository.QuestionRepository;
-import db.repository.UserRepository;
+import db.repository.BotUserRepository;
 import objects.chatfuel.ChatfuelRegistrationRequest;
 import objects.chatfuel.ChatfuelRequest;
 import objects.chatfuel.ChatfuelResponse;
+import objects.dbentities.BotUser;
 import objects.dbentities.PlatformToUser;
 import objects.dbentities.Question;
-import objects.dbentities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import util.ContentGenerator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
 
@@ -39,7 +39,7 @@ public class ChatfuelController {
     private UserDao userDao;
 
     @Autowired
-    private UserRepository userRepository;
+    private BotUserRepository userRepository;
 
     @Autowired
     private ChatfuelBroadcaster chatfuelBroadcaster;
@@ -61,6 +61,9 @@ public class ChatfuelController {
 
     @Autowired
     private AnswersDao answersDao;
+
+    @Autowired
+    private PlatformRepository platformRepository;
 
 
     private boolean init = false;
@@ -96,6 +99,12 @@ public class ChatfuelController {
         return "saved";
     }
 
+    @GetMapping("platforms")
+    public List<BotUser> getPlatforms() {
+        System.out.println(platformRepository.findAll());
+        return userRepository.findAll();
+    }
+
 
     @GetMapping("populate")
     public String populate() {
@@ -118,14 +127,14 @@ public class ChatfuelController {
         System.out.println("user first and lastnames are: " + req.getFirstName() + " " + req.getLastName());
         // my id: 2449441191741397
         // marie id: 2518988008117216
-        User user = new User();
+        BotUser user = new BotUser();
         user.setFirstName(req.getFirstName());
         user.setLastname(req.getLastName());
         user.setQuestionGroupId(1L);
         user.setTeamId(1L);
         user.setCompanyId(1L);
         user.setScore(0L);
-        User u = userRepository.save(user);
+        BotUser u = userRepository.save(user);
 
         //todo select platform 'chatfuel' by name, then get id, then tie the user to the id
         PlatformToUser platformToUser = new PlatformToUser();
@@ -148,7 +157,7 @@ public class ChatfuelController {
 
 
         if(request.getChatfuelUserId() == null) {
-            throw new IllegalArgumentException("User id cannot be null when getting content for chatfuel");
+            throw new IllegalArgumentException("BotUser id cannot be null when getting content for chatfuel");
         }
 
         ChatfuelResponse res = null;

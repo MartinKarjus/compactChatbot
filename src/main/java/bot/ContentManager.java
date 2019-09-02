@@ -2,10 +2,10 @@ package bot;
 
 import bot.update.ContentUpdater;
 import bot.update.UserUpdater;
+import objects.dbentities.BotUser;
 import objects.dbentities.Plan;
 import objects.dbentities.Platform;
 import objects.dbentities.PlatformToUser;
-import objects.dbentities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,19 +26,17 @@ public class ContentManager {
 
 
     // super inefficient, need to come up with a better way
-    private List<Plan> filterOutSentContent(User user, List<Plan> userGroupPlans) {
+    private List<Plan> filterOutSentContent(BotUser user, List<Plan> userPlans) {
         List<Plan> plansToSend = new ArrayList<>();
 
-        if (userUpdater.getPlanAccomplishedUserToPlansByIds().size() == 0) {
-            plansToSend.addAll(userGroupPlans);
+        if (!userUpdater.getPlanAccomplishedUserToPlansByIds().keySet().contains(user.getId())) {
+            plansToSend.addAll(userPlans);
             return plansToSend;
         }
 
-        for (Map.Entry<Long, List<Long>> entry : userUpdater.getPlanAccomplishedUserToPlansByIds().entrySet()) {
-            for (Plan plan : userGroupPlans) {
-                if (!(user.getId().equals(entry.getKey()) && entry.getValue().contains(plan.getId()))) {
-                    plansToSend.add(plan);
-                }
+        for (Plan userPlan : userPlans) {
+            if(!userUpdater.getPlanAccomplishedUserToPlansByIds().get(user.getId()).contains(userPlan.getId())) {
+                plansToSend.add(userPlan);
             }
         }
 
@@ -50,7 +48,7 @@ public class ContentManager {
                 .getTimeToSend().toLocalDateTime().toLocalTime();
     }
 
-    private List<Plan> filterOutLaterContentAndUserGroup(List<Plan> userGroupPlans, User u) {
+    private List<Plan> filterOutLaterContentAndUserGroup(List<Plan> userGroupPlans, BotUser u) {
         List<Plan> plansToSend = new ArrayList<>();
 
         for (Plan plan : userGroupPlans) {
@@ -64,10 +62,10 @@ public class ContentManager {
     }
 
 
-    public Map<User, List<Plan>> getUnsentContent() {
-        Map<User, List<Plan>> contentToSendToUsers = new HashMap<>();
+    public Map<BotUser, List<Plan>> getUnsentContent() {
+        Map<BotUser, List<Plan>> contentToSendToUsers = new HashMap<>();
 
-        for (User user : userUpdater.getUsersById().values()) {
+        for (BotUser user : userUpdater.getUsersById().values()) {
             List<Plan> plans = filterOutSentContent(user, contentUpdater.getContentForQuestionGroupForDay(user.getQuestionGroupId()));
             plans = filterOutLaterContentAndUserGroup(plans, user);
 
@@ -93,7 +91,7 @@ public class ContentManager {
         return earliest;
     }
 
-    public List<Platform> getPlatformsForUser(User user) {
+    public List<Platform> getPlatformsForUser(BotUser user) {
         List<Platform> platforms = new ArrayList<>();
 
         for (PlatformToUser platformToUser : userUpdater.getUserToPlatformToUser().get(user.getId())) {

@@ -7,10 +7,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import util.FileUtil;
@@ -19,23 +22,40 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Configuration
-@EnableTransactionManagement
-@ComponentScan(basePackages = {"db.dao", "bot"})
+//@Configuration
+//@EnableTransactionManagement
+//@ComponentScan(basePackages = {"db.dao", "bot"})
 @PropertySource("classpath:/application.properties")
+@EnableJpaRepositories(basePackages = {"db.dao", "bot"})
 public class DbConfig {
 
     @Autowired
     public Environment env;
 
+//    @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource ds = new DriverManagerDataSource();
+//        ds.setDriverClassName("org.hsqldb.jdbcDriver");
+//        ds.setUrl(env.getProperty("db.url"));
+//
+////        new JdbcTemplate(ds)
+////                .update(FileUtil.readFileFromClasspath("schema.sql"));
+////        new JdbcTemplate(ds)
+////                .update(FileUtil.readFileFromClasspath("someData.sql"));
+//
+//        return ds;
+//    }
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("org.hsqldb.jdbcDriver");
-        ds.setUrl(env.getProperty("db.url"));
+        ds.setDriverClassName("org.postgresql.Driver");
+        ds.setUrl(env.getProperty("spring.datasource.url"));
+        ds.setUsername("compactadmin");
+        ds.setPassword("P66sastetaga");
 
-        new JdbcTemplate(ds)
-                .update(FileUtil.readFileFromClasspath("schema.sql"));
+//        new JdbcTemplate(ds)
+//                .update(FileUtil.readFileFromClasspath("schema.sql"));
 //        new JdbcTemplate(ds)
 //                .update(FileUtil.readFileFromClasspath("someData.sql"));
 
@@ -46,19 +66,31 @@ public class DbConfig {
     public PlatformTransactionManager transactionManager(
             EntityManagerFactory entityManagerFactory) {
 
+
         return new JpaTransactionManager(entityManagerFactory);
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        factory.setPackagesToScan("order", "objects");
-        factory.setDataSource(dataSource());
-        factory.setJpaProperties(additionalProperties());
-        factory.afterPropertiesSet();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//        factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+//        factory.setPackagesToScan("order", "objects");
+//        factory.setDataSource(dataSource());
+//        factory.setJpaProperties(additionalProperties());
+//        factory.afterPropertiesSet();
 
-        return factory.getObject();
+//        return factory.getObject();
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabase(Database.POSTGRESQL);
+        vendorAdapter.setGenerateDdl(true);
+
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan(getClass().getPackage().getName());
+        factory.setDataSource(dataSource());
+        factory.setPackagesToScan("objects");
+
+        return factory;
     }
 
     private Properties additionalProperties() {

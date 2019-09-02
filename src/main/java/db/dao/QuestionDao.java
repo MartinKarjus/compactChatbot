@@ -2,7 +2,7 @@ package db.dao;
 
 import objects.dbentities.Question;
 import objects.dbentities.QuestionGroup;
-import objects.dbentities.User;
+import objects.dbentities.BotUser;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,7 +18,7 @@ public class QuestionDao {
     EntityManager entityManager;
 
 
-    public List<Question> getContentForDay(List<Long> daysForUsergroups, List<QuestionGroup> usergroups, List<User> botUsers) {
+    public List<Question> getContentForDay(List<Long> daysForUsergroups, List<QuestionGroup> usergroups, List<BotUser> botUsers) {
         List<Long> ids = usergroups
                 .stream()
                 .map(QuestionGroup::getId)

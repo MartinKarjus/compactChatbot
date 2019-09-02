@@ -1,30 +1,20 @@
 package controller;
 
 
-import bot.ContentSender;
 import bot.chatfuelapi.ChatfuelBroadcaster;
-import bot.chatfuelapi.ChatfuelContentSender;
-import db.dao.UserDao;
-import db.repository.PlatformToUserRepository;
-import db.repository.QuestionRepository;
-import db.repository.UserRepository;
+import db.repository.BotUserRepository;
 import objects.chatfuel.ChatfuelRegistrationRequest;
 import objects.chatfuel.ChatfuelRequest;
 import objects.chatfuel.ChatfuelResponse;
-import objects.dbentities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import util.ContentGenerator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class ChatfuelTestController {
 
 
     @Autowired
-    private UserRepository userRepository;
+    private BotUserRepository userRepository;
 
 
     @Autowired
@@ -92,7 +82,7 @@ public class ChatfuelTestController {
         System.out.println(request.getChatfuelUserId());
         return "{\n" +
                 " \"messages\": [\n" +
-                "   {\"text\": \"User id is\"},\n" +
+                "   {\"text\": \"BotUser id is\"},\n" +
                 "   {\"text\": \"" + request.getChatfuelUserId() + "\"}\n" +
                 " ]\n" +
                 "}";
@@ -104,19 +94,19 @@ public class ChatfuelTestController {
 //        System.out.println("Getting request");
 //        System.out.println(request.getChatfuelUserId());
 //        System.out.println(request);
-//        User user = new User();
+//        BotUser user = new BotUser();
 //        user.setFirstName("firstName");
 //        user.setLastname("lastname");
 //        user.setQuestionGroupId(1L);
 //
 //
 //        userRepository.save(user);
-//        List<User> users = new ArrayList<>();
+//        List<BotUser> users = new ArrayList<>();
 //        userRepository.findAll().forEach(users::add);
 //
 //        return "{\n" +
 //                " \"messages\": [\n" +
-//                "   {\"text\": \"User registered, current users: " + users + "\"},\n" +
+//                "   {\"text\": \"BotUser registered, current users: " + users + "\"},\n" +
 //                " ]\n" +
 //                "}";
 //    }
@@ -131,7 +121,7 @@ public class ChatfuelTestController {
     }
 
 //    @GetMapping("cake2")
-//    public List<User> cake2() {
+//    public List<BotUser> cake2() {
 //        System.out.println("cakeRequest2");
 //        return userDao.getAllUsersFromPlatform("chatfuel");
 //    }

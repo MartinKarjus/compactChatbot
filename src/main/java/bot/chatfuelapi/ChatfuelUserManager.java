@@ -1,12 +1,9 @@
 package bot.chatfuelapi;
 
 
-import bot.update.ContentUpdater;
 import bot.update.UserUpdater;
-import db.dao.UserDao;
-import objects.dbentities.Plan;
+import objects.dbentities.BotUser;
 import objects.dbentities.PlatformToUser;
-import objects.dbentities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +16,7 @@ public class ChatfuelUserManager {
     @Autowired
     private UserUpdater userUpdater;
 
-    public User getUserWithChatfuelUserId(String chatfuelId) {
+    public BotUser getUserWithChatfuelUserId(String chatfuelId) {
         //easier to do with a db request i guess but i didnt have any data to test on when i made this
         System.out.println("chatfuel user id is: " + chatfuelId);
         System.out.println("user to platform map: " +userUpdater.getUserToPlatformToUser());
