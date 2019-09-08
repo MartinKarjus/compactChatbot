@@ -2,59 +2,105 @@ DROP SCHEMA PUBLIC CASCADE;
 
 -- CREATE SCHEMA public;
 
+DROP SEQUENCE IF EXISTS content_sequence;
+
 CREATE
     SEQUENCE content_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS team_sequence;
+
 CREATE
   SEQUENCE team_sequence AS INTEGER START
   WITH 1;
+
+DROP SEQUENCE IF EXISTS media_sequence;
+
 CREATE
     SEQUENCE media_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS user_sequence;
+
 CREATE
     SEQUENCE user_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS company_sequence;
+
 CREATE
     SEQUENCE company_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS plan_sequence;
+
 CREATE
     SEQUENCE plan_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS time_to_send_sequence;
+
 CREATE
     SEQUENCE time_to_send_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS platform_sequence;
+
 CREATE
     SEQUENCE platform_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS platform_to_user_sequence;
+
 CREATE
     SEQUENCE platform_to_user_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS platform_to_company_sequence;
+
 CREATE
     SEQUENCE platform_to_company_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS plan_accomplished_sequence;
+
 CREATE
     SEQUENCE plan_accomplished_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS answers_sequence;
+
 CREATE
     SEQUENCE answers_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS question_group_sequence;
+
 CREATE
     SEQUENCE question_group_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS question_sequence;
+
 CREATE
     SEQUENCE question_sequence AS INTEGER START
     WITH 1;
+
+DROP SEQUENCE IF EXISTS transmission_log_sequence;
 
 CREATE
     SEQUENCE transmission_log_sequence AS INTEGER START
     WITH 1;
 
+DROP TABLE IF EXISTS public.company CASCADE;
 
 CREATE TABLE public.company (
                               id BIGINT NOT NULL PRIMARY KEY,
                               date_created TIMESTAMP,
                               name VARCHAR(200)
 );
+
+DROP TABLE IF EXISTS public.question_group CASCADE;
 
 CREATE TABLE public.question_group (
    id BIGINT NOT NULL PRIMARY KEY,
@@ -67,6 +113,8 @@ CREATE TABLE public.question_group (
      REFERENCES public.company (id) on DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.media CASCADE;
+
 CREATE TABLE public.media
 (
     id     BIGINT NOT NULL PRIMARY KEY,
@@ -75,6 +123,8 @@ CREATE TABLE public.media
     type   VARCHAR(5000),
     source VARCHAR(5000)
 );
+
+DROP TABLE IF EXISTS public.question CASCADE;
 
 CREATE TABLE public.question
 (
@@ -93,13 +143,16 @@ CREATE TABLE public.question
         REFERENCES public.media (id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.time_to_send CASCADE;
 
 CREATE TABLE public.time_to_send
 (
     id                BIGINT NOT NULL PRIMARY KEY,
     date_created      TIMESTAMP,
-    time_to_send      DATETIME
+    time_to_send      DATE
 );
+
+DROP TABLE IF EXISTS public.plan CASCADE;
 
 CREATE TABLE public.plan
 (
@@ -121,6 +174,8 @@ CREATE TABLE public.plan
         REFERENCES public.time_to_send (id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.team CASCADE;
+
 CREATE TABLE public.team (
                            id BIGINT NOT NULL PRIMARY KEY,
                            name VARCHAR(200) NOT NULL,
@@ -128,6 +183,8 @@ CREATE TABLE public.team (
                            date_modified TIMESTAMP,
                            score BIGINT
 );
+
+DROP TABLE IF EXISTS public.bot_user CASCADE;
 
 CREATE TABLE public.bot_user (
      id BIGINT NOT NULL PRIMARY KEY,
@@ -151,6 +208,8 @@ CREATE TABLE public.bot_user (
        REFERENCES public.company ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.plan_accomplished CASCADE;
+
 CREATE TABLE public.plan_accomplished
 (
     id           BIGINT NOT NULL PRIMARY KEY,
@@ -164,6 +223,8 @@ CREATE TABLE public.plan_accomplished
         REFERENCES public.plan (id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.transmission_log CASCADE;
+
 CREATE TABLE public.transmission_log
 (
   id      BIGINT NOT NULL primary key,
@@ -176,6 +237,8 @@ CREATE TABLE public.transmission_log
   FOREIGN KEY (question_id)
     REFERENCES public.question (id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS public.answers CASCADE;
 
 CREATE TABLE public.answers
 (
@@ -191,10 +254,14 @@ CREATE TABLE public.answers
         REFERENCES public.question (id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS public.platform CASCADE;
+
 CREATE TABLE public.platform(
     id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR(5000)
 );
+
+DROP TABLE IF EXISTS public.platform_to_user CASCADE;
 
 CREATE TABLE public.platform_to_user
 (
