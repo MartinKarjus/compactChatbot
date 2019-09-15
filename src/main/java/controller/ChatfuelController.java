@@ -102,6 +102,7 @@ public class ChatfuelController {
     @GetMapping("platforms")
     public List<BotUser> getPlatforms() {
         System.out.println(platformRepository.findAll());
+
         return userRepository.findAll();
     }
 

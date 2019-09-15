@@ -50,7 +50,7 @@ public class ChatfuelFileContentReader {
         return new ObjectMapper().readValue(json, ChatfuelResponse.class);
     }
 
-    private String readFromInputStream(InputStream inputStream)
+    public String readFromInputStream(InputStream inputStream)
             throws IOException {
         StringBuilder resultStringBuilder = new StringBuilder();
         try (BufferedReader br

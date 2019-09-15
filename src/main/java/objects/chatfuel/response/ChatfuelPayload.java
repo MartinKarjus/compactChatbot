@@ -11,7 +11,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatfuelPayload {
-    String template_type; //generic for galleries, media for videos/images/text, list for list of choices
+    String template_type; //generic for galleries, media for videos/images/text, list for list of choices /
     @JsonProperty("top_element_style")
     String topElementStyle; // anything other than large? g2 test and find out
     String url; //videos, images

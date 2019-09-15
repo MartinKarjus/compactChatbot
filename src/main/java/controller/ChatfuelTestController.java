@@ -1,13 +1,24 @@
 package controller;
 
 
+import bot.chatfuelapi.AsyncBroadcast;
 import bot.chatfuelapi.ChatfuelBroadcaster;
 import db.repository.BotUserRepository;
 import objects.chatfuel.ChatfuelRegistrationRequest;
 import objects.chatfuel.ChatfuelRequest;
 import objects.chatfuel.ChatfuelResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.WebAsyncTask;
+import util.contentreader.ContentFileReader;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ChatfuelTestController {
@@ -21,6 +32,18 @@ public class ChatfuelTestController {
     private ChatfuelBroadcaster chatfuelBroadcaster;
 
 
+
+    @GetMapping("getcake")
+    public WebAsyncTask<Map<String, Object>> simpleAsyncTask(@RequestParam(defaultValue="5") long t) {
+        return new WebAsyncTask<Map<String, Object>>(10000, () -> {
+
+            System.out.println("starting wait.." + LocalDateTime.now());
+            Thread.sleep(t * 1000);
+            System.out.println("ending wait..." + LocalDateTime.now());
+
+            return Collections.<String, Object>singletonMap("key", "success");
+        });
+    }
 
 
     @GetMapping("test/{a}")
@@ -49,6 +72,21 @@ public class ChatfuelTestController {
                 "   {\"text\": \"works\"}\n" +
                 " ]\n" +
                 "}";
+    }
+
+    @GetMapping("emoji")
+    public ResponseEntity<String> getEmoji() throws IOException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Content-Type",
+                "text/html; charset=utf-8");
+        List<List<String>> l = new ContentFileReader().readFile("/botcontent/Chatbot flow new - Sheet1.csv");
+        String s = "{\n" +
+                " \"messages\": [\n" +
+                "   {\"text\": \"emoji: \uD83D\uDE02\uD83D\uDE0D\uD83C\uDF89\uD83D\uDC4D\"},\n" +
+                "   {\"text\": \"a whole file: " + l.toString() + "\"}\n" +
+                " ]\n" +
+                "}";
+        return ResponseEntity.ok().headers(responseHeaders).body(s);
     }
 
 
@@ -85,6 +123,43 @@ public class ChatfuelTestController {
                 "   {\"text\": \"BotUser id is\"},\n" +
                 "   {\"text\": \"" + request.getChatfuelUserId() + "\"}\n" +
                 " ]\n" +
+                "}";
+    }
+
+    @GetMapping("testimg")
+    public String testImg() {
+        return "{\n" +
+                "  \"messages\": [\n" +
+                "    {\n" +
+                "      \"attachment\": {\n" +
+                "        \"type\": \"template\",\n" +
+                "        \"payload\": {\n" +
+                "          \"template_type\": \"media\",\n" +
+                "          \"elements\": [\n" +
+                "            {\n" +
+                "              \"media_type\": \"image\",\n" +
+                "              \"url\": \"https://miro.medium.com/max/2702/1*J-IsGF9-RVxREb2chMtHeg.png\",\n" +
+                "              \"buttons\": [\n" +
+                "                {\n" +
+                "                  \"title\": \"Go to Chatfuel!\",\n" +
+                "                  \"type\": \"web_url\",\n" +
+                "                  \"url\": \"https://chatfuel.com/\"\n" +
+                "                }\n" +
+                "              ]\n" +
+                "            }\n" +
+                "          ]\n" +
+                "        }\n" +
+                "      },\n" +
+                "      \"quick_replies\": [\n" +
+                "        {\n" +
+                "          \"title\": \"That's cool!\",\n" +
+                "          \"set_attributes\": {\n" +
+                "            \"feedback\": \"Cool!\"\n" +
+                "          }\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
                 "}";
     }
 
