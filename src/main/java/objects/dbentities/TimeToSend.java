@@ -21,4 +21,10 @@ public class TimeToSend {
 
     @Column(name = "time_to_send")
     private Timestamp timeToSend;
+
+    @Column(name = "always_send")
+    private boolean alwaysSend;
+
+    @Column(name = "never_send")
+    private boolean neverSend;
 }

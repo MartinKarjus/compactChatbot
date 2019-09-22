@@ -16,6 +16,10 @@ import java.io.IOException;
 
 @Service
 public class ChatfuelContentSender {
+    // TODO add check for no chatfuel content / write time, if neither exist throw error, otherwise use write time first(we dont actually ever get both at once i think?)
+    // todo add lead_to planning logic(save original plan to map, when lead to ends resume original?)
+
+    //todo get write/wait time from the NEXT block
 
     @Autowired
     private ContentUpdater contentUpdater;

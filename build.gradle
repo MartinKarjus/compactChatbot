@@ -17,9 +17,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws
     compile group: 'org.springframework.cloud', name: 'spring-cloud-aws', version: '2.1.2.RELEASE', ext: 'pom'
     
-    // https://mvnrepository.com/artifact/postgresql/postgresql
-    compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
 
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
+
+    
     compile group: 'com.opencsv', name: 'opencsv', version: '4.6'
 
     compile group: 'org.springframework',

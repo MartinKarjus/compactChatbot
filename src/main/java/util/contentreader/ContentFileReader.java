@@ -35,7 +35,6 @@ public class ContentFileReader {
                 }
             }
         }
-        System.out.println("read lines:" + records);
 
         return records;
     }

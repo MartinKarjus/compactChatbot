@@ -42,4 +42,7 @@ public class Question {
     @Column(name = "media_id")
     private Long mediaId;
 
+    @Column(name = "leads_to_question_name")
+    private String leadsToQuestionName;
+
 }

@@ -38,8 +38,8 @@ public class DbConfig {
 //        ds.setDriverClassName("org.hsqldb.jdbcDriver");
 //        ds.setUrl(env.getProperty("db.url"));
 //
-////        new JdbcTemplate(ds)
-////                .update(FileUtil.readFileFromClasspath("schema.sql"));
+//        new JdbcTemplate(ds)
+//                .update(FileUtil.readFileFromClasspath("schema.sql"));
 ////        new JdbcTemplate(ds)
 ////                .update(FileUtil.readFileFromClasspath("someData.sql"));
 //
@@ -51,8 +51,11 @@ public class DbConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
         ds.setUrl(env.getProperty("spring.datasource.url"));
-        ds.setUsername("compactadmin");
-        ds.setPassword("P66sastetaga");
+        ds.setUsername(env.getProperty("spring.datasource.username"));
+        ds.setPassword(env.getProperty("spring.datasource.password"));
+        //ds.getSchema()
+
+
 
 //        new JdbcTemplate(ds)
 //                .update(FileUtil.readFileFromClasspath("schema.sql"));
@@ -72,14 +75,7 @@ public class DbConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-//        factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-//        factory.setPackagesToScan("order", "objects");
-//        factory.setDataSource(dataSource());
-//        factory.setJpaProperties(additionalProperties());
-//        factory.afterPropertiesSet();
 
-//        return factory.getObject();
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(Database.POSTGRESQL);
         vendorAdapter.setGenerateDdl(true);
@@ -90,18 +86,31 @@ public class DbConfig {
         factory.setDataSource(dataSource());
         factory.setPackagesToScan("objects");
 
+
         return factory;
     }
 
-    private Properties additionalProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "validate");
-        properties.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.HSQLDialect");
-        properties.setProperty("hibernate.show_sql", "false");
-        properties.setProperty("hibernate.format_sql", "true");
-
-        return properties;
-    }
+//    @Bean
+//    public EntityManagerFactory entityManagerFactory() {
+//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//        factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+//        factory.setPackagesToScan("order", "objects");
+//        factory.setDataSource(dataSource());
+//        factory.setJpaProperties(additionalProperties());
+//        factory.afterPropertiesSet();
+//
+//        return factory.getObject();
+//    }
+//
+//    private Properties additionalProperties() {
+//        Properties properties = new Properties();
+//        properties.setProperty("hibernate.hbm2ddl.auto", "validate");
+//        properties.setProperty("hibernate.dialect",
+//                "org.hibernate.dialect.HSQLDialect");
+//        properties.setProperty("hibernate.show_sql", "false");
+//        properties.setProperty("hibernate.format_sql", "true");
+//
+//        return properties;
+//    }
 
 }

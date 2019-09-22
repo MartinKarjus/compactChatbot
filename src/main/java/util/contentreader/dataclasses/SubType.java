@@ -15,11 +15,34 @@ public class SubType extends ContentBase {
     String imageUrl;
     String videoUrl;
     String leadTo;
-    String weblinkUrl;
+    Pair<String, String> weblinkUrl;
     Double waitTime;
     Pair<Double, Double> writeTime;
     Pair<String, String> attribute;
     Double points;
+
+    public boolean oneNonNull() {
+        Field[] fields = this.getClass().getDeclaredFields();
+        boolean oneNonNull = false;
+
+        for (Field field : fields) {
+            String name = field.getName();
+            field.setAccessible(true);
+            try {
+                if (field.get(this) != null) {
+                    if(oneNonNull) {
+                        return false;
+                    } else {
+                        oneNonNull = true;
+                    }
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return oneNonNull;
+    }
 
     @Override
     public String toString() {

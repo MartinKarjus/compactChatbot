@@ -2,7 +2,7 @@ package util.contentreader;
 
 import javafx.util.Pair;
 import objects.chatfuel.response.ChatfuelMessage;
-import objects.shared.ContentByPlatform;
+import util.contentreader.converter.GeneralConverter;
 import util.contentreader.dataclasses.*;
 import util.contentreader.exception.InvalidFieldException;
 
@@ -13,15 +13,17 @@ import java.util.*;
 public class ContentReader {
     private List<String> validOptions = new ArrayList<>(Arrays.asList("timetosend", "daytosend", "company", "outsideworkhours", "description", "namedmessage"));
     private List<String> validMessages = new ArrayList<>(Arrays.asList("message", "writemsg", "waitmsg"));
-    private List<String> validSubtypes = new ArrayList<>(Arrays.asList("text", "image", "link", "video", "leadto", "query", "queryend", "choices", "answer", "wait", "write", "comment", "points"));
+    private List<String> validSubtypes = new ArrayList<>(Arrays.asList("text", "image", "link", "video", "leadto", "query", "queryend", "choices", "answer", "wait", "write", "points", "setattribute"));
+    private List<String> ignoredTypes = new ArrayList<>(Arrays.asList("comment", "queryend"));
+    private List<String> pointsPresets = new ArrayList<>(Arrays.asList("few", "medium", "many"));
+
 
     private String latestMessage = "";
     private Map<String, List<String>> options = new HashMap<>();
     private List<ContentBase> question = new ArrayList<>();
     private List<Choice> choices = new ArrayList<>();
 
-    public static Integer findMax(Set<Integer> set)
-    {
+    public static Integer findMax(Set<Integer> set) {
 
         if (set == null || set.size() == 0) {
             return Integer.MIN_VALUE;
@@ -34,10 +36,6 @@ public class ContentReader {
         return sortedlist.get(sortedlist.size() - 1);
     }
 
-    public static void main(String[] args) throws IOException {
-        new ContentReader().readAndUpdate(null);
-
-    }
 
     public void reset() {
         latestMessage = "";
@@ -60,6 +58,7 @@ public class ContentReader {
     }
 
     private Map<String, List<String>> handleOptions(Map<String, List<String>> options, List<String> newOption) {
+        // Currently the options are added as a List<String> from the entire line, the first element(option name) should not be added, BUT everything else accounts for this.
         if (options.containsKey(newOption.get(0))) {
             throw new IllegalArgumentException("Option '" + newOption.get(0) + "' already set, fix input file.");
         }
@@ -74,6 +73,8 @@ public class ContentReader {
     }
 
     public List<List<ContentBase>> update(List<List<String>> linesLeft) {
+        reset();
+
 
         List<List<ContentBase>> content = new ArrayList<>();
 
@@ -85,29 +86,33 @@ public class ContentReader {
             line.set(0, line.get(0).toLowerCase());
             iterator.remove();
 
-            System.out.println("line: " + line);
+//            System.out.println("line: " + line);
 
 
             if (validOptions.contains(line.get(0))) {
-                options = handleOptions(options, line);
+                if(line.get(0).equals("description") || line.get(0).equals("company")) {
+                    options = handleOptions(options, line);
+                } else {
+                    if(line.size() >= 2) {
+                        line.set(1, line.get(1).toLowerCase());
+                    }
+                    if(line.size() >= 3) {
+                        line.set(2, line.get(2).toLowerCase());
+                    }
+                    options = handleOptions(options, line);
+                }
+            } else if (ignoredTypes.contains(line.get(0))) {
+               continue;
             } else if (validMessages.contains(line.get(0))) {
 
-                if(choices.size() > 0) {
-                    choices.get(choices.size() -1).getAnswers().get(findMax(choices.get(choices.size() - 1).getAnswers().keySet())).addAll(question);
-                    question = new ArrayList<>();
-                    choices.remove(choices.size() - 1);
-                    if(choices.size() > 0) {
-                        //todo when theres a choice inside a choice that ends correctly, it would throw an error..
-                        //throw new IllegalArgumentException("Using a Message type component before finishing answers for all choices")
-                    }
-                }
+                fillOutLastAnswer();
 
                 SubType subType = new SubType();
 
-                switch (line.get(0)){
-                    case"message":
+                switch (line.get(0)) {
+                    case "message":
                         latestMessage = "message";
-                        if(question.size() > 0) {
+                        if (question.size() > 0) {
                             content.add(question);
                             question = new ArrayList<>();
                         }
@@ -128,7 +133,6 @@ public class ContentReader {
                         break;
                     default:
                         throw new IllegalArgumentException("Unhandled messagetype: " + line.get(0));
-
                 }
 
 
@@ -138,46 +142,51 @@ public class ContentReader {
                     SubType subType = new SubType();
 
                     if (subTypeName.contains("answer")) {
-                        if(choices.size() == 0) {
+                        if (choices.size() == 0) {
                             throw new IllegalArgumentException("Answer block without preceeding Choices block.");
                         }
 
-                        System.out.println("----start answer----");
-                        System.out.println("choices start: " + choices);
+//                        System.out.println("----start answer----");
+//                        System.out.println("choices start: " + choices);
                         Integer nr = getNumberFromAnswer(subTypeName);
                         boolean dealtWith = false;
-                        while(!dealtWith) {
-                            if(choices.get((choices.size() - 1)).getAnswers().keySet().contains(nr) &&
+                        while (!dealtWith) {
+                            if (choices.get((choices.size() - 1)).getAnswers().keySet().contains(nr) &&
                                     choices.get(choices.size() - 1).getAnswers().get(nr) == null) {
                                 choices.get(choices.size() - 1).getAnswers().put(nr, new ArrayList<>());
-                                if(line.size() == 2) {
-                                    subType.setPoints(Double.valueOf(line.get(1)));
+                                if (line.size() == 2) {
+                                    line.set(1, line.get(1).toLowerCase());
+                                    if(pointsPresets.contains(line.get(1))) {
+                                        getPointsForKeyword(line, subType);
+                                    } else {
+                                        subType.setPoints(Double.valueOf(line.get(1)));
+                                    }
                                     choices.get(choices.size() - 1).getAnswers().get(nr).add(subType);
                                 }
 
-                                if(nr > 1) {
-                                    System.out.println("over here");
-                                    System.out.println("question: " + question);
-                                    choices.get(choices.size() -1).getAnswers().get(nr -1).addAll(question);
+                                if (nr > 1) {
+//                                    System.out.println("over here");
+//                                    System.out.println("question: " + question);
+                                    choices.get(choices.size() - 1).getAnswers().get(nr - 1).addAll(question);
                                     question = new ArrayList<>();
                                 }
 
                                 dealtWith = true;
-                            } else if(choices.get(choices.size() - 1).getAnswers().keySet().size() < nr) { //answer nr too big for current choice
+                            } else if (choices.get(choices.size() - 1).getAnswers().keySet().size() < nr) { //answer nr too big for current choice
                                 setQuestionToLastAnswer(nr);
-                                choices.remove(choices.size() -1);
-                            } else if(choices.get(choices.size() - 1).getAnswers().get(nr) != null) { //goes up in questions hierarchy
+                                choices.remove(choices.size() - 1);
+                            } else if (choices.get(choices.size() - 1).getAnswers().get(nr) != null) { //goes up in questions hierarchy
                                 setQuestionToLastAnswer(nr);
-                                choices.remove(choices.size() -1);
+                                choices.remove(choices.size() - 1);
                             } else {
                                 throw new RuntimeException("oh crap.. this shouldnt happen");
                             }
-                            if(choices.size() == 0) {
+                            if (choices.size() == 0) {
                                 dealtWith = true;
                             }
                         }
-                        System.out.println("choices end: " + choices);
-                        System.out.println("-----end answer-----");
+//                        System.out.println("choices end: " + choices);
+//                        System.out.println("-----end answer-----");
                         continue;
                     }
 
@@ -192,11 +201,18 @@ public class ContentReader {
                             question.add(subType);
                             break;
                         case "link":
-                            subType.setWeblinkUrl(line.get(1));
+                            subType.setWeblinkUrl(new Pair<>(line.get(1), line.get(2)));
                             question.add(subType);
                             break;
                         case "points":
-                            subType.setPoints(Double.valueOf(line.get(1)));
+                            line.set(1, line.get(1).toLowerCase());
+
+                            if(pointsPresets.contains(line.get(1))) {
+                                getPointsForKeyword(line, subType);
+                            } else {
+                                subType.setPoints(Double.valueOf(line.get(1)));
+                            }
+
                             question.add(subType);
                             break;
                         case "video":
@@ -211,7 +227,6 @@ public class ContentReader {
                             //question = new ArrayList<>();
                             break;
                         case "queryend":
-                        case "comment":
                             break;
                         case "choices":
                             Choice choice = new Choice();
@@ -246,56 +261,97 @@ public class ContentReader {
                 }
 
 
-            } else if (line.get(0).equals("messageend")) {
-                question.add(new ContentOptions(options));
-                content.add(question);
-                return content;
+            } else if (line.get(0).equals("endmessage")) {
+//                fillOutLastAnswer();
+//                question.add(new ContentOptions(options));
+//                content.add(question);
+//                return content;
+                break;
             } else {
                 throw new InvalidFieldException("Line starts with no valid option, message or subtype type: " + line.get(0) + "\n" + "Entire line: " + line);
             }
         }
 
-        question.add(new ContentOptions(options));
-        content.add(question);
+        fillOutLastAnswer();
+
+        if(question.size() > 0) {
+            content.add(question);
+            question = new ArrayList<>();
+            question.add(new ContentOptions(options));
+            content.add(question);
+        } else {
+            question.add(new ContentOptions(options));
+            content.add(question);
+        }
+
         return content;
     }
 
+    private void getPointsForKeyword(List<String> line, SubType subType) {
+        switch (line.get(1)) {
+            case "few":
+                subType.setPoints(5.0);
+                break;
+            case "medium":
+                subType.setPoints(10.0);
+                break;
+            case "many":
+                subType.setPoints(15.0);
+                break;
+        }
+    }
+
+    private void fillOutLastAnswer() {
+        if (choices.size() > 0) {
+            choices.get(choices.size() - 1).getAnswers().get(findMax(choices.get(choices.size() - 1).getAnswers().keySet())).addAll(question);
+            question = new ArrayList<>();
+            choices.remove(choices.size() - 1);
+            if (choices.size() > 0) {
+                //todo when theres a choice inside a choice that ends correctly, it would throw an error..
+                //throw new IllegalArgumentException("Using a Message type component before finishing answers for all choices")
+            }
+        }
+    }
+
     private void setQuestionToLastAnswer(Integer nr) {
-        if(nr == null) {
+        if (nr == null) {
             Integer last = findMax(choices.get(choices.size() - 1).getAnswers().keySet());
-            choices.get(choices.size() -1 ).getAnswers().get(last).addAll(question);
-        } else if(nr > 1){
-            choices.get(choices.size() -1 ).getAnswers().get(nr - 1).addAll(question);
+            choices.get(choices.size() - 1).getAnswers().get(last).addAll(question);
+        } else if (nr > 1) {
+            choices.get(choices.size() - 1).getAnswers().get(nr - 1).addAll(question);
         }
         choices.remove(choices.size() - 1);
 
         question = new ArrayList<>();
     }
 
-    public void readAndUpdate(String fileName) throws IOException {
+    public List<List<List<ContentBase>>> readAndUpdate(String fileName) throws IOException {
         fileName = "/botcontent/Chatbot flow new - Sheet1.csv";
 
         List<List<String>> lines = new ContentFileReader().readFile(fileName);
-        ContentHolder contentHolder = new ContentHolder(lines);
 
 
         List<List<List<ContentBase>>> plans = new ArrayList<>();
-        for (List<List<ContentBase>> plan : plans) {
-            System.out.println(plan);
+
+        while(lines.size() > 0) {
+            plans.add(update(lines)); // reads the entire file, EndMessage marks a new block and returns
         }
 
-        System.out.println("lines length: " + lines.size());
-        plans.add(update(lines));
-        System.out.println("lines length: " + lines.size());
+        //printResult(plans);
+
+        return plans;
+    }
+
+    private void printResult(List<List<List<ContentBase>>> plans) {
+        System.out.println("\n\n");
         for (List<List<ContentBase>> plan : plans) {
-            System.out.println("------------------");
+            System.out.println("\n------------------");
             System.out.println(plan);
             for (List<ContentBase> contentBases : plan) {
-                System.out.println("/-/-/-/-/-/-/-/-");
+                System.out.println("/-/-/-/-/-/-/-/-/");
                 System.out.println(contentBases);
             }
         }
-
-        //List<ContentByPlatform> contentByPlatforms = new ContentToPlatforms().getContentByPlatforms(plans);
     }
+
 }

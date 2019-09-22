@@ -1,7 +1,6 @@
 package controller;
 
 
-import bot.chatfuelapi.AsyncBroadcast;
 import bot.chatfuelapi.ChatfuelBroadcaster;
 import db.repository.BotUserRepository;
 import objects.chatfuel.ChatfuelRegistrationRequest;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.WebAsyncTask;
+import util.FileUtil;
 import util.contentreader.ContentFileReader;
 
 import java.io.IOException;
@@ -126,41 +126,9 @@ public class ChatfuelTestController {
                 "}";
     }
 
-    @GetMapping("testimg")
+    @GetMapping("testing")
     public String testImg() {
-        return "{\n" +
-                "  \"messages\": [\n" +
-                "    {\n" +
-                "      \"attachment\": {\n" +
-                "        \"type\": \"template\",\n" +
-                "        \"payload\": {\n" +
-                "          \"template_type\": \"media\",\n" +
-                "          \"elements\": [\n" +
-                "            {\n" +
-                "              \"media_type\": \"image\",\n" +
-                "              \"url\": \"https://miro.medium.com/max/2702/1*J-IsGF9-RVxREb2chMtHeg.png\",\n" +
-                "              \"buttons\": [\n" +
-                "                {\n" +
-                "                  \"title\": \"Go to Chatfuel!\",\n" +
-                "                  \"type\": \"web_url\",\n" +
-                "                  \"url\": \"https://chatfuel.com/\"\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      },\n" +
-                "      \"quick_replies\": [\n" +
-                "        {\n" +
-                "          \"title\": \"That's cool!\",\n" +
-                "          \"set_attributes\": {\n" +
-                "            \"feedback\": \"Cool!\"\n" +
-                "          }\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        return FileUtil.readFileFromClasspath("json/randomtesting.json");
     }
 
 

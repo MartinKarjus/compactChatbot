@@ -18,6 +18,12 @@ public class Plan {
     @Column(name = "date_created")
     private Timestamp dateCreated;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "named_message")
+    private String namedMessage;
+
     @Column(name = "date_modified")
     private Timestamp dateModified;
 
