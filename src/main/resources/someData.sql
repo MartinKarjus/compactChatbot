@@ -92,19 +92,19 @@ INSERT INTO public.answers (id, question_id, date_created, user_id, points, answ
 VALUES (1, 1, '2019-01-01', 2, 50, 'Bike');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (2, 2, '2019-01-01', 2, 50, 'No');
+VALUES (2, 2, '2019-01-02', 2, 50, 'No');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (3, 3, '2019-01-01', 2, 50, 'No');
+VALUES (3, 3, '2019-01-03', 2, 50, 'No');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
 VALUES (4, 1, '2019-01-01', 3, 20, 'Public Transport');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (5, 2, '2019-01-01', 3, 50, 'Yes');
+VALUES (5, 2, '2019-01-02', 3, 50, 'Yes');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (6, 3, '2019-01-01', 3, 20, 'No');
+VALUES (6, 3, '2019-01-03', 3, 20, 'No');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
 VALUES (7, 1, '2019-01-01', 4, 50, 'Bike');
@@ -113,16 +113,16 @@ INSERT INTO public.answers (id, question_id, date_created, user_id, points, answ
 VALUES (8, 1, '2019-01-01', 5, 50, 'On Foot');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (9, 2, '2019-01-01', 5, 50, 'No');
+VALUES (9, 2, '2019-01-02', 5, 50, 'No');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (10, 3, '2019-01-01', 5, 100, 'All');
+VALUES (10, 3, '2019-01-03', 5, 100, 'All');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
 VALUES (11, 4, '2019-01-01', 1, 100, 'Never');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (12, 5, '2019-01-01', 1, 100, 'Yes');
+VALUES (12, 5, '2019-01-02', 1, 100, 'Yes');
 
 INSERT INTO public.answers (id, question_id, date_created, user_id, points, answer)
-VALUES (13, 6, '2019-01-01', 1, 100, 'No');
+VALUES (13, 6, '2019-01-03', 1, 100, 'No');
