@@ -342,8 +342,8 @@ public class ContentReader {
 
         printResult(plans);
 
-        //return plans;
-        return null;
+        return plans;
+        //return null;
     }
 
     private void printResult(List<List<List<ContentBase>>> plans) {
