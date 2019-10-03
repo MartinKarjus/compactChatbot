@@ -40,6 +40,9 @@ public class ChatfuelConverter {
     public void addWebLink(ChatfuelResponse chatfuelResponse, Pair<String, String> weblinkUrl) {
         constructor.makeWebLinkElement(chatfuelResponse);
 
+        System.out.println("weblink url pair: " + weblinkUrl);
+        System.out.println("last msg: " + constructor.getLastMessage(chatfuelResponse));
+
         constructor.getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons()
                 .get(constructor.getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons().size() - 1)
                 .setUrl(weblinkUrl.getKey());

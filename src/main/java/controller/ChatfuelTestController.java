@@ -74,20 +74,20 @@ public class ChatfuelTestController {
                 "}";
     }
 
-    @GetMapping("emoji")
-    public ResponseEntity<String> getEmoji() throws IOException {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Content-Type",
-                "text/html; charset=utf-8");
-        List<List<String>> l = new ContentFileReader().readFile("/botcontent/Chatbot flow new - Sheet1.csv");
-        String s = "{\n" +
-                " \"messages\": [\n" +
-                "   {\"text\": \"emoji: \uD83D\uDE02\uD83D\uDE0D\uD83C\uDF89\uD83D\uDC4D\"},\n" +
-                "   {\"text\": \"a whole file: " + l.toString() + "\"}\n" +
-                " ]\n" +
-                "}";
-        return ResponseEntity.ok().headers(responseHeaders).body(s);
-    }
+//    @GetMapping("emoji")
+//    public ResponseEntity<String> getEmoji() throws IOException {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set("Content-Type",
+//                "text/html; charset=utf-8");
+//        List<List<String>> l = new ContentFileReader().readFile("/botcontent/Chatbot flow new - Sheet1.csv");
+//        String s = "{\n" +
+//                " \"messages\": [\n" +
+//                "   {\"text\": \"emoji: \uD83D\uDE02\uD83D\uDE0D\uD83C\uDF89\uD83D\uDC4D\"},\n" +
+//                "   {\"text\": \"a whole file: " + l.toString() + "\"}\n" +
+//                " ]\n" +
+//                "}";
+//        return ResponseEntity.ok().headers(responseHeaders).body(s);
+//    }
 
 
     @PostMapping("test/{userId}/{questionId}/{questionAnswerId}")

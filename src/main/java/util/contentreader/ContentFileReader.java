@@ -2,9 +2,11 @@ package util.contentreader;
 
 import com.opencsv.CSVReader;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +33,12 @@ public class ContentFileReader {
                 List<String> l = new ArrayList<>(Arrays.asList(values));
                 l.removeAll(Arrays.asList("", null));
                 if(l.size() > 0) {
+                    for (String s : l) {
+                        if(s.contains("{{terminate}}")) {
+                            return records;
+                        }
+                    }
+
                     records.add(l);
                 }
             }

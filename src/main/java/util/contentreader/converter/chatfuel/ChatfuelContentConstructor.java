@@ -73,17 +73,14 @@ public class ChatfuelContentConstructor {
         chatfuelResponse.getMessages().add(new ChatfuelMessage());
     }
 
+
     public void makeWebLinkElement(ChatfuelResponse chatfuelResponse) {
-        if (chatfuelResponse.getMessages() != null) { // checks incase its a series of links
-            if (chatfuelResponse.getMessages().size() > 0) {
-                if (getLastMessage(chatfuelResponse).getAttachment() != null) {
-                    if (getLastMessage(chatfuelResponse).getAttachment().getPayload() != null) {
-                        if (getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons() != null) {
-                            getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons().add(new ChatfuelButton());
-                        }
-                    }
-                }
-            }
+        if (chatfuelResponse.getMessages() != null &&
+                chatfuelResponse.getMessages().size() > 0
+                && getLastMessage(chatfuelResponse).getAttachment() != null
+                && getLastMessage(chatfuelResponse).getAttachment().getPayload() != null
+                && getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons() != null) {
+            getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons().add(new ChatfuelButton());
         } else {
             makeNewChatfuelMessage(chatfuelResponse);
             getLastMessage(chatfuelResponse).getAttachment().setType(DEFAULT_ATTACHMENT_TYPE);
@@ -93,6 +90,8 @@ public class ChatfuelContentConstructor {
             getLastMessage(chatfuelResponse).getAttachment().getPayload().setButtons(new ArrayList<>());
             getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons().add(new ChatfuelButton());
         }
+
+        getLastMessage(chatfuelResponse).getAttachment().getPayload().getButtons().add(new ChatfuelButton());
     }
 
     public void makeChoices(ChatfuelResponse chatfuelResponse) {

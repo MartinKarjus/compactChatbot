@@ -11,8 +11,6 @@ import objects.shared.ContentByPlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import util.contentreader.converter.ConvertResult;
-import util.contentreader.converter.TempQuestionRep;
-import util.contentreader.converter.TempTimeRep;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +39,7 @@ public class ContentToDb {
         for (Map.Entry<Plan, HashMap<Question, ContentByPlatform>> entry1 : convertResult.getPlanToQuestionToContent().entrySet()) {
             Question q = questionRepository.findById(entry1.getValue().entrySet().iterator().next().getKey().getId()).get();
             entry1.getKey().setQuestionId(q.getId());
-            if(entry1.getKey().getDay() == null) {
+            if (entry1.getKey().getDay() == null) {
                 entry1.getKey().setDay(-1L);
             }
             planRepository.save(entry1.getKey());
@@ -49,9 +47,15 @@ public class ContentToDb {
             for (Map.Entry<Question, ContentByPlatform> entry : entry1.getValue().entrySet()) {
                 try {
                     String json = mapper.writeValueAsString(entry.getValue());
-                    Question question = questionRepository.findById(entry.getKey().getId()).get();
-                    question.setText(json);
-                    questionRepository.save(question);
+                    if (entry.getKey().getId() != null) {
+                        if (questionRepository.findById(entry.getKey().getId()).isPresent()) {
+
+                            Question question = questionRepository.findById(entry.getKey().getId()).get();
+                            question.setText(json);
+                            questionRepository.save(question);
+                        }
+                    }
+
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

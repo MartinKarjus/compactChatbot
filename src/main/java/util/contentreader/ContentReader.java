@@ -2,7 +2,6 @@ package util.contentreader;
 
 import javafx.util.Pair;
 import objects.chatfuel.response.ChatfuelMessage;
-import util.contentreader.converter.GeneralConverter;
 import util.contentreader.dataclasses.*;
 import util.contentreader.exception.InvalidFieldException;
 
@@ -72,6 +71,48 @@ public class ContentReader {
         return Integer.valueOf(answer);
     }
 
+    public static void main(String[] args) throws IOException {
+        new ContentReader().readAndUpdate("/botcontent/Drinking - Morning (1).csv");
+    }
+
+    private void getPointsForKeyword(List<String> line, SubType subType) {
+        switch (line.get(1)) {
+            case "few":
+                subType.setPoints(5.0);
+                break;
+            case "medium":
+                subType.setPoints(10.0);
+                break;
+            case "many":
+                subType.setPoints(15.0);
+                break;
+        }
+    }
+
+    private void fillOutLastAnswer() {
+        if (choices.size() > 0) {
+            choices.get(choices.size() - 1).getAnswers().get(findMax(choices.get(choices.size() - 1).getAnswers().keySet())).addAll(question);
+            question = new ArrayList<>();
+            choices.remove(choices.size() - 1);
+            if (choices.size() > 0) {
+                //todo when theres a choice inside a choice that ends correctly, it would throw an error..
+                //throw new IllegalArgumentException("Using a Message type component before finishing answers for all choices")
+            }
+        }
+    }
+
+    private void setQuestionToLastAnswer(Integer nr) {
+        if (nr == null) {
+            Integer last = findMax(choices.get(choices.size() - 1).getAnswers().keySet());
+            choices.get(choices.size() - 1).getAnswers().get(last).addAll(question);
+        } else if (nr > 1) {
+            choices.get(choices.size() - 1).getAnswers().get(nr - 1).addAll(question);
+        }
+        choices.remove(choices.size() - 1);
+
+        question = new ArrayList<>();
+    }
+
     public List<List<ContentBase>> update(List<List<String>> linesLeft) {
         reset();
 
@@ -132,7 +173,7 @@ public class ContentReader {
                         question = new ArrayList<>();
                         break;
                     default:
-                        throw new IllegalArgumentException("Unhandled messagetype: " + line.get(0));
+                        throw new IllegalArgumentException("Unhandled messagetype: " + line.get(0)+ " ,on line: " + line);
                 }
 
 
@@ -143,7 +184,7 @@ public class ContentReader {
 
                     if (subTypeName.contains("answer")) {
                         if (choices.size() == 0) {
-                            throw new IllegalArgumentException("Answer block without preceeding Choices block.");
+                            throw new IllegalArgumentException("Answer block without preceeding Choices block. On line: " + line);
                         }
 
 //                        System.out.println("----start answer----");
@@ -254,10 +295,10 @@ public class ContentReader {
                             question.add(subType);
                             break;
                         default:
-                            throw new IllegalArgumentException("Unhandled subtype: " + subTypeName);
+                            throw new IllegalArgumentException("Unhandled subtype: " + subTypeName + " , on line: " + line);
                     }
                 } else {
-                    throw new IllegalArgumentException("Invalid use of subtypes, all subtypes must follow a Message, current last:" + latestMessage);
+                    throw new IllegalArgumentException("Invalid use of subtypes, all subtypes must follow a Message, current last:" + latestMessage +"\n Line:" + line);
                 }
 
 
@@ -287,49 +328,11 @@ public class ContentReader {
         return content;
     }
 
-    private void getPointsForKeyword(List<String> line, SubType subType) {
-        switch (line.get(1)) {
-            case "few":
-                subType.setPoints(5.0);
-                break;
-            case "medium":
-                subType.setPoints(10.0);
-                break;
-            case "many":
-                subType.setPoints(15.0);
-                break;
-        }
-    }
-
-    private void fillOutLastAnswer() {
-        if (choices.size() > 0) {
-            choices.get(choices.size() - 1).getAnswers().get(findMax(choices.get(choices.size() - 1).getAnswers().keySet())).addAll(question);
-            question = new ArrayList<>();
-            choices.remove(choices.size() - 1);
-            if (choices.size() > 0) {
-                //todo when theres a choice inside a choice that ends correctly, it would throw an error..
-                //throw new IllegalArgumentException("Using a Message type component before finishing answers for all choices")
-            }
-        }
-    }
-
-    private void setQuestionToLastAnswer(Integer nr) {
-        if (nr == null) {
-            Integer last = findMax(choices.get(choices.size() - 1).getAnswers().keySet());
-            choices.get(choices.size() - 1).getAnswers().get(last).addAll(question);
-        } else if (nr > 1) {
-            choices.get(choices.size() - 1).getAnswers().get(nr - 1).addAll(question);
-        }
-        choices.remove(choices.size() - 1);
-
-        question = new ArrayList<>();
-    }
-
     public List<List<List<ContentBase>>> readAndUpdate(String fileName) throws IOException {
-        fileName = "/botcontent/Chatbot flow new - Sheet1.csv";
+
 
         List<List<String>> lines = new ContentFileReader().readFile(fileName);
-
+        System.out.println("****************** READING CONTENT FILE: " + fileName + " ******************");
 
         List<List<List<ContentBase>>> plans = new ArrayList<>();
 
@@ -337,9 +340,10 @@ public class ContentReader {
             plans.add(update(lines)); // reads the entire file, EndMessage marks a new block and returns
         }
 
-        //printResult(plans);
+        printResult(plans);
 
-        return plans;
+        //return plans;
+        return null;
     }
 
     private void printResult(List<List<List<ContentBase>>> plans) {
