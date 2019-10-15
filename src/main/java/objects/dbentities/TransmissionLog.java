@@ -13,7 +13,7 @@ public class TransmissionLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transmission_log_seq")
-    @SequenceGenerator(name = "transmission_log_seq", sequenceName = "transmission_log_sequence")
+    @SequenceGenerator(name = "transmission_log_seq", sequenceName = "transmission_log_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "question_id")

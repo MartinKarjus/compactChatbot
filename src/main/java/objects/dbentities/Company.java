@@ -13,7 +13,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-    @SequenceGenerator(name = "company_seq", sequenceName = "company_sequence")
+    @SequenceGenerator(name = "company_seq", sequenceName = "company_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "date_created")

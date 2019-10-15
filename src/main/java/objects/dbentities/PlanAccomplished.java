@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @Table(name = "plan_accomplished")
-public class PlanAccomplished {
+public class PlanAccomplished { //todo remove? can just create a view based on plan+question+tranmission_log join to show it, also theres no way to find out if content is sent atm
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "plan_accomplished_seq")

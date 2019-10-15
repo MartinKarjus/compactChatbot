@@ -14,7 +14,7 @@ public class BotUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "first_name")

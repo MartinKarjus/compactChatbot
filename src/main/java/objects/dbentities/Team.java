@@ -12,7 +12,7 @@ public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "team_seq")
-    @SequenceGenerator(name = "team_seq", sequenceName = "team_sequence")
+    @SequenceGenerator(name = "team_seq", sequenceName = "team_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "name")
