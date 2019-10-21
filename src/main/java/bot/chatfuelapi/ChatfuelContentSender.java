@@ -1,6 +1,7 @@
 package bot.chatfuelapi;
 
 
+import bot.chatfuelapi.forking.NextContentGetter;
 import bot.update.ContentUpdater;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.repository.PlanAccomplishedRepository;
@@ -34,10 +35,10 @@ public class ChatfuelContentSender {
     private PlanAccomplishedRepository planAccomplishedRepository;
 
     @Autowired
-    private AsyncBroadcast asyncBroadcast;
+    private TransmissionLogRepository transmissionLogRepository;
 
     @Autowired
-    private TransmissionLogRepository transmissionLogRepository;
+    private NextContentGetter nextContentGetter;
 
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -60,41 +61,28 @@ public class ChatfuelContentSender {
 
 
 
-
-    //todo add logging
-    // is followup is for that(only plan based questions get logged into plan accomplished)
     private ChatfuelResponse getContentAndScheduleFollowup(BotUser user, Long questionId, boolean isFollowup, String chatfuelUserId) {
         Question question = contentUpdater.getQuestionsById().get(questionId);
         ContentByPlatform contentByPlatform = null;
+
         try {
             contentByPlatform = getContentByPlatform(question.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        if (question.getLeadsToQuestionId() != null) {
-            asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(question.getLeadsToQuestionId()));
-        }
-        System.out.println("past aSync");
-
         TransmissionLog t = new TransmissionLog();
         t.setQuestionId(questionId);
         t.setUserId(user.getId());
         transmissionLogRepository.save(t);
+
+        nextContentGetter.findAndBroadcastNextQuestion(user, question, chatfuelUserId);//todo move to seperate thread maybe
+
         return contentByPlatform.getChatfuelResponse();
     }
 
 
     public ChatfuelResponse getChatfuelContent(Platform platform, Plan plan, BotUser user, PlatformToUser platformToUser) {
-
-        //todo since spring requests are async, you might Start getting next request before this is actually saved,
-        // causing the same question to be sent multiple times
-        // to fix it, we will need to lock requests for users that are being processed or somehow limit the endpoint.. stuff to think about
-        // might also need to move this to some place we get actual confirmation
-
-        //currently we only mass update ourselves and requests are for specific user.. so this might no longer be an issue
-        // going to leave the comment here for now though as we will need to eventually implement it
         PlanAccomplished planAccomplished = new PlanAccomplished();
         planAccomplished.setPlanId(plan.getId());
         planAccomplished.setUserId(user.getId());

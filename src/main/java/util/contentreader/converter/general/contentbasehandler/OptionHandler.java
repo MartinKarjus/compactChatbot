@@ -1,4 +1,4 @@
-package util.contentreader.converter.general;
+package util.contentreader.converter.general.contentbasehandler;
 
 import db.repository.CompanyRepository;
 import db.repository.TimeToSendRepository;

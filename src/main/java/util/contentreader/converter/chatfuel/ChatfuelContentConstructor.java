@@ -98,6 +98,7 @@ public class ChatfuelContentConstructor {
         makeNewChatfuelMessage(chatfuelResponse);
         getLastMessage(chatfuelResponse).getAttachment().setType(DEFAULT_ATTACHMENT_TYPE);
         getLastMessage(chatfuelResponse).getAttachment().setPayload(new ChatfuelPayload());
+        getLastMessage(chatfuelResponse).getAttachment().getPayload().setText(".");//todo remove after tieing last text to button..
         getLastMessage(chatfuelResponse).getAttachment().getPayload().setTemplate_type(BUTTON_TEMPLATE_TYPE);
         getLastMessage(chatfuelResponse).getAttachment().getPayload().setButtons(new ArrayList<>());
     }

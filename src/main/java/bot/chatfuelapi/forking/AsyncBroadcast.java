@@ -1,6 +1,7 @@
-package bot.chatfuelapi;
+package bot.chatfuelapi.forking;
 
 
+import bot.chatfuelapi.ChatfuelBroadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
@@ -20,19 +21,15 @@ public class AsyncBroadcast {
 
 
     @Async
-    void broadcastNextQuestion(String chatfuelUserId, String questionId) {
-        System.out.println("Async broadcast...");
+    void broadcastNextQuestion(String chatfuelUserId, String questionId, int sleepTimeInMilliSec) {
+        System.out.println("planning broadcast for<chatfuelUserId, questionId>: " + chatfuelUserId + ", " + questionId);
         Map<String, String> attributes = new HashMap<>();
         attributes.put(env.getProperty("chatfuel_question_id_attribute_name"), questionId);
         try {
-            Thread.sleep(15000); // todo change to duration based on text length last sent
+            Thread.sleep(sleepTimeInMilliSec);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("sending to broadcast: "
-                + " | " + chatfuelUserId
-                + " | " + env.getProperty("chatfuel_specific_content_block")
-                + " | " + attributes);
         broadcaster.broadcastBlockToUser(chatfuelUserId, env.getProperty("chatfuel_specific_content_block"), attributes);
     }
 }

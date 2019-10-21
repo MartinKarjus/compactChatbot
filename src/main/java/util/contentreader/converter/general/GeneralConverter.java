@@ -6,18 +6,17 @@ import db.repository.QuestionRepository;
 import db.repository.TimeToSendRepository;
 import objects.dbentities.Plan;
 import objects.dbentities.Question;
-import objects.dbentities.TimeToSend;
 import objects.shared.ContentByPlatform;
-import util.contentreader.converter.ConvertResult;
 import util.contentreader.converter.chatfuel.ChatfuelConverter;
+import util.contentreader.converter.general.contentbasehandler.ChoiceHandler;
+import util.contentreader.converter.general.contentbasehandler.OptionHandler;
+import util.contentreader.converter.general.contentbasehandler.QuestionHandler;
+import util.contentreader.converter.general.contentbasehandler.SubtypeHandler;
 import util.contentreader.dataclasses.Choice;
 import util.contentreader.dataclasses.ContentBase;
 import util.contentreader.dataclasses.ContentOptions;
 import util.contentreader.dataclasses.SubType;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GeneralConverter {
@@ -53,12 +52,18 @@ public class GeneralConverter {
         questionHandler = new QuestionHandler(questionRepository);
         subtypeHandler = new SubtypeHandler(questionHandler);
         optionHandler = new OptionHandler(timeToSendRepository, companyRepository);
-        choiceHandler = new ChoiceHandler(questionRepository, timeToSendRepository, questionHandler);
+        choiceHandler = new ChoiceHandler(questionHandler);
     }
 
 
 
     private void convertContentBase(ContentBase contentBase) {
+        System.out.println("***************************************");
+        System.out.println("contentByPlatformMap: " + questionHandler.getQuestionContentByPlatformMap());
+        for (Map.Entry<Question, ContentByPlatform> questionContentByPlatformEntry : questionHandler.getQuestionContentByPlatformMap().entrySet()) {
+            System.out.println(questionContentByPlatformEntry);
+        }
+        System.out.println("***************************************");
         //System.out.println("Converting: " + contentBase);
         if (contentBase instanceof Choice) {
             choiceHandler.handleChoice((Choice) contentBase, questionRepository, timeToSendRepository, companyRepository, planRepository);
@@ -81,7 +86,7 @@ public class GeneralConverter {
     }
 
     private void savePlan() {
-
+        planRepository.save(currentPlan);
     }
 
 
@@ -95,11 +100,10 @@ public class GeneralConverter {
             currentPlan = new Plan();
 
             for (List<ContentBase> contentBases : stringPlans) {
-
                 convertContent(contentBases);
             }
             questionHandler.setCurrentQuestionAsFinal();
-
+            currentPlan.setQuestionId(questionHandler.getFirstQuestion().getId());
             savePlan();
             questionHandler.reset();
 

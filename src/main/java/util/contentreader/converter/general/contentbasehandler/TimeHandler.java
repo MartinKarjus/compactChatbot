@@ -1,4 +1,4 @@
-package util.contentreader.converter.general;
+package util.contentreader.converter.general.contentbasehandler;
 
 import objects.dbentities.TimeToSend;
 

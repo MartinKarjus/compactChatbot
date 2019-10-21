@@ -4,7 +4,9 @@ package controller;
 import bot.ContentSender;
 import bot.chatfuelapi.ChatfuelBroadcaster;
 import bot.chatfuelapi.ChatfuelContentSender;
+import bot.chatfuelapi.forking.NextContentGetter;
 import bot.temp.ChatfuelFileContentReader;
+import bot.user.UserEmailRegistration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,10 +23,7 @@ import objects.dbentities.BotUser;
 import objects.dbentities.PlatformToUser;
 import objects.dbentities.Question;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import util.ContentGenerator;
 
 import java.io.IOException;
@@ -65,6 +64,12 @@ public class ChatfuelController {
     @Autowired
     private PlatformRepository platformRepository;
 
+    @Autowired
+    private UserEmailRegistration userEmailRegistration;
+
+    @Autowired
+    private NextContentGetter nextContentGetter;
+
 
     private boolean init = false;
 
@@ -85,19 +90,19 @@ public class ChatfuelController {
 
     }
 
-    @PostMapping("/chatfuel/answer")
-    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
-        System.out.println("Getting request");
-        System.out.println(request.getMessenger_user_id());
-        System.out.println(request);
-        answersDao.save(Long.parseLong(request.getLast_visited_block_id()),
-                new Timestamp(System.currentTimeMillis()),
-                Long.parseLong(request.getMessenger_user_id()),
-                Long.parseLong("0"),
-                request.getLast_clicked_button_name());
-
-        return "saved";
-    }
+//    @PostMapping("/chatfuel/answer")
+//    public String chatFuelAnswerUpdate(@RequestBody ChatfuelRequest request) {
+//        System.out.println("Getting request");
+//        System.out.println(request.getMessenger_user_id());
+//        System.out.println(request);
+//        answersDao.save(Long.parseLong(request.getLast_visited_block_id()),
+//                new Timestamp(System.currentTimeMillis()),
+//                Long.parseLong(request.getMessenger_user_id()),
+//                Long.parseLong("0"),
+//                request.getLast_clicked_button_name());
+//
+//        return "saved";
+//    }
 
     @GetMapping("platforms")
     public List<BotUser> getPlatforms() {
@@ -151,19 +156,19 @@ public class ChatfuelController {
     }
 
 
-
-
     @PostMapping("/chatfuel/getcontent")
-    public ChatfuelResponse chatfuelGetContent(@RequestBody ChatfuelRequest request) throws JsonProcessingException {
+    public String chatfuelGetContent(@RequestBody ChatfuelRequest request) throws JsonProcessingException {
+        System.out.println("\n\n - - - - - - - - - - - --  - -- - - - - - - - - -\n");
 
-
-        if(request.getChatfuelUserId() == null) {
+        if (request.getChatfuelUserId() == null) {
             throw new IllegalArgumentException("BotUser id cannot be null when getting content for chatfuel");
         }
 
+        //if(userEmailRegistration.checkUserRegisteredByPlatformSpecificId(request.getChatfuelUserId()))
+
         ChatfuelResponse res = null;
 
-        if(request.getQuestionId() == null) {
+        if (request.getQuestionId() == null) {
             System.out.println("--1--");
             res = (ChatfuelResponse) contentSender.chatfuelContentRequest(request.getChatfuelUserId(), "chatfuel");
             System.out.println("SENDING1:" + res);
@@ -176,15 +181,25 @@ public class ChatfuelController {
         ObjectMapper mapper = new ObjectMapper();
 
         String str = mapper.writeValueAsString(res);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String str2 = mapper.writeValueAsString(res);
         System.out.println(str);
-        System.out.println(str2);
+
 
         System.out.println("get content request:" + mapper.writeValueAsString(request));
 
-        return res;
+        return str;
     }
+
+
+    @PostMapping("/chatfuel/answer")
+    public String chatfuelAnswer(@RequestBody String req,
+                                 @RequestParam("userId") String id,
+                                 @RequestParam("choiceQuestionId") Long currentQuestionId,
+                                 @RequestParam("requestQuestionId") Long questionToAskForAfterAnswerId) {
+        nextContentGetter.broadCastByIdToUser(questionToAskForAfterAnswerId, id);
+
+        return "huh, what do you know, this works";
+    }
+
 
     @GetMapping("/chatfuel/getContent")
     public void getContent() {
@@ -192,9 +207,6 @@ public class ChatfuelController {
 
         contentSender.sendOutContent();
     }
-
-
-
 
 
 }

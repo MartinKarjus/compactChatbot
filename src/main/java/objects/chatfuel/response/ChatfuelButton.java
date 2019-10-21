@@ -10,11 +10,11 @@ import java.util.Map;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatfuelButton {
+    String url;
+    String type; //weburl/json_plugin_url/show_block/element_share
     String title;
     @JsonProperty("block_names")
     List<String> blockNames;
-    String type; //weburl/json_plugin_url/show_block/element_share
-    String url;
     @JsonProperty("set_attributes")
     Map<String, String> setUserAttributes; // (show_block  or json_plugin_url  only)
 

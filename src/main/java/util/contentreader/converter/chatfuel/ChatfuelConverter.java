@@ -12,8 +12,9 @@ import java.util.HashMap;
 public class ChatfuelConverter {
 
     public static final String JSON_PLUGIN_URL = "json_plugin_url";
-    public static final String ADDRESS = "http://89.235.217.102:8080";
+    public static final String ADDRESS = "http://89.235.209.90:8080";
     public static final String API_CHATFUEL_ANSWER = "/api/chatfuel/answer";
+
     private ChatfuelContentConstructor constructor = new ChatfuelContentConstructor();
 
 

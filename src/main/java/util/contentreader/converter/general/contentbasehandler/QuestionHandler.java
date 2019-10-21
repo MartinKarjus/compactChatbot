@@ -1,4 +1,4 @@
-package util.contentreader.converter.general;
+package util.contentreader.converter.general.contentbasehandler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,12 +9,11 @@ import objects.shared.ContentByPlatform;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Data
 public class QuestionHandler {
     private Question firstQuestion;
-    private Question currentQuestion = new Question();
+    private Question currentQuestion;
     private Question lastQuestion;
     private QuestionRepository questionRepository;
     private HashMap<Question, ContentByPlatform> questionContentByPlatformMap = new HashMap<>();
@@ -22,7 +21,7 @@ public class QuestionHandler {
 
     public QuestionHandler(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
-        questionContentByPlatformMap.put(currentQuestion, new ContentByPlatform());
+        newQuestionWithContent();
     }
 
     public ContentByPlatform getContentForCurrentQuestion() {
@@ -34,7 +33,7 @@ public class QuestionHandler {
             throw new RuntimeException("Trying to reset while currentQuestion not null(not set as final question), current question: " + currentQuestion);
         }
         questionContentByPlatformMap = new LinkedHashMap<>();
-        currentQuestion = new Question();
+        newQuestionWithContent();
         lastQuestion = null;
         firstQuestion = null;
     }
@@ -59,6 +58,7 @@ public class QuestionHandler {
         currentQuestion = questionRepository.save(currentQuestion);
         if (lastQuestion != null) {
             lastQuestion.setLeadsToQuestionId(currentQuestion.getId());
+            questionRepository.save(lastQuestion);
         } else {
             firstQuestion = currentQuestion;
         }
@@ -72,7 +72,14 @@ public class QuestionHandler {
     }
 
     public void setCurrentQuestionAsFinal() {
-        makeNextQuestion();
-        currentQuestion = null;
+        currentQuestion.setText(contentAsJson(questionContentByPlatformMap.get(currentQuestion)));
+        currentQuestion = questionRepository.save(currentQuestion);
+        if (lastQuestion != null) {
+            lastQuestion.setLeadsToQuestionId(currentQuestion.getId());
+            questionRepository.save(lastQuestion);
+        } else {
+            firstQuestion = currentQuestion;
+        }
+        currentQuestion = null; // only for reset check
     }
 }

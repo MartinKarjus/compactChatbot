@@ -22,4 +22,11 @@ public class ChatfuelRegistrationRequest {
 
     @JsonProperty("token")
     private String token;
+
+    @JsonProperty("company_name")
+    private String companyName;
+
+    @JsonProperty("team_id")
+    private Long teamId;//todo maybe could change to nr but need to check what kind of data chatfuel keeps its variables in
+
 }

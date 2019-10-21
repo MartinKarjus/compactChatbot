@@ -5,17 +5,12 @@
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": "Content 1\n Website link and joining",
+          "text": "",
           "buttons": [
             {
               "type": "web_url",
               "url": "https://compact.ee",
               "title": "Learn more"
-            },
-            {
-              "url": "http://89.235.205.176:8080/api/test/{{messenger user id}}/1/2",
-              "type": "json_plugin_url",
-              "title": "Test request"
             }
           ]
         }

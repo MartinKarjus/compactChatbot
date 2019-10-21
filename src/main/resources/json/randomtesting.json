@@ -1,35 +1,12 @@
 {
   "messages": [
-    {"text": "What are you up to?"},
     {
       "attachment": {
-        "type": "template",
+        "type": "image",
         "payload": {
-          "template_type": "media",
-          "elements": [
-            {
-              "media_type": "image",
-              "url": "https://www.facebook.com/chatfuelrockets/photos/1087668107975064",
-              "buttons": [
-                {
-                  "title": "Go to Chatfuel!",
-                  "type": "web_url",
-                  "url": "https://chatfuel.com/"
-                }
-              ]
-            }
-          ]
+          "url": "https://tobaccofreelife.org/wp-content/uploads/2016/05/smoking-fire-hazard-cigarette-butts.jpg"
         }
-      },
-      "quick_replies": [
-        {
-          "title": "That's cool!",
-          "set_attributes": {
-            "feedback": "Cool!"
-          }
-        }
-      ]
-    },
-    {"text": "the end"}
+      }
+    }
   ]
 }

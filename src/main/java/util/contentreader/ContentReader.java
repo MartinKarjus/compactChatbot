@@ -71,9 +71,6 @@ public class ContentReader {
         return Integer.valueOf(answer);
     }
 
-    public static void main(String[] args) throws IOException {
-        new ContentReader().readAndUpdate("/botcontent/Drinking - Morning (1).csv");
-    }
 
     private void getPointsForKeyword(List<String> line, SubType subType) {
         switch (line.get(1)) {
@@ -111,6 +108,10 @@ public class ContentReader {
         choices.remove(choices.size() - 1);
 
         question = new ArrayList<>();
+    }
+
+    public static void main(String[] args) throws IOException {
+        new ContentReader().readAndUpdate("/temp/Drinking - Morning (1).csv");
     }
 
     public List<List<ContentBase>> update(List<List<String>> linesLeft) {
@@ -206,8 +207,6 @@ public class ContentReader {
                                 }
 
                                 if (nr > 1) {
-//                                    System.out.println("over here");
-//                                    System.out.println("question: " + question);
                                     choices.get(choices.size() - 1).getAnswers().get(nr - 1).addAll(question);
                                     question = new ArrayList<>();
                                 }
@@ -215,10 +214,10 @@ public class ContentReader {
                                 dealtWith = true;
                             } else if (choices.get(choices.size() - 1).getAnswers().keySet().size() < nr) { //answer nr too big for current choice
                                 setQuestionToLastAnswer(nr);
-                                choices.remove(choices.size() - 1);
+                                //choices.remove(choices.size() - 1);
                             } else if (choices.get(choices.size() - 1).getAnswers().get(nr) != null) { //goes up in questions hierarchy
                                 setQuestionToLastAnswer(nr);
-                                choices.remove(choices.size() - 1);
+                                //choices.remove(choices.size() - 1);
                             } else {
                                 throw new RuntimeException("oh crap.. this shouldnt happen");
                             }
@@ -340,22 +339,26 @@ public class ContentReader {
             plans.add(update(lines)); // reads the entire file, EndMessage marks a new block and returns
         }
 
-        printResult(plans);
+        //printResult(plans);
 
         return plans;
-        //return null;
     }
 
     private void printResult(List<List<List<ContentBase>>> plans) {
-        System.out.println("\n\n");
+        StringBuilder s = new StringBuilder("cake");
+        s.append("\n\n");
         for (List<List<ContentBase>> plan : plans) {
-            System.out.println("\n------------------");
-            System.out.println(plan);
+            s.append("\n\n------------------");
+            s.append("\n").append(plan);
             for (List<ContentBase> contentBases : plan) {
-                System.out.println("/-/-/-/-/-/-/-/-/");
-                System.out.println(contentBases);
+                s.append("\n\t/-/-/-/-/-/-/-/-/");
+                //s.append(contentBases);
+                for (ContentBase contentBase : contentBases) {
+                    s.append("\n\t\t").append(contentBase);
+                }
             }
         }
+        System.out.println(s.toString());
     }
 
 }

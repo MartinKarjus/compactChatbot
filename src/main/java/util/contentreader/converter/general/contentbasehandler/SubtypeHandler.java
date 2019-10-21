@@ -1,8 +1,5 @@
-package util.contentreader.converter.general;
+package util.contentreader.converter.general.contentbasehandler;
 
-import javafx.util.Pair;
-import objects.dbentities.Question;
-import objects.shared.ContentByPlatform;
 import util.contentreader.converter.chatfuel.ChatfuelConverter;
 import util.contentreader.dataclasses.SubType;
 
@@ -22,16 +19,20 @@ public class SubtypeHandler {
         }
 
         if (subType.getImageUrl() != null) {
+            questionHandler.makeNextQuestion();
             chatfuelConverter.addImage(questionHandler.getContentForCurrentQuestion().getChatfuelResponse(), subType.getImageUrl());
         } else if (subType.getText() != null) {
             questionHandler.makeNextQuestion();
             chatfuelConverter.addText(questionHandler.getContentForCurrentQuestion().getChatfuelResponse(), subType.getText());
         } else if (subType.getVideoUrl() != null) {
+            questionHandler.makeNextQuestion();
             chatfuelConverter.addVideo(questionHandler.getContentForCurrentQuestion().getChatfuelResponse(), subType.getVideoUrl());
         } else if (subType.getLeadTo() != null) {
+            if(questionHandler.getContentForCurrentQuestion().isFork()) {
+                questionHandler.makeNextQuestion();
+            }
             questionHandler.getContentForCurrentQuestion().setFork(true);
             questionHandler.getCurrentQuestion().setLeadsToQuestionName(subType.getLeadTo());
-            questionHandler.makeNextQuestion();
         } else if (subType.getWeblinkUrl() != null) {
             chatfuelConverter.addWebLink(questionHandler.getContentForCurrentQuestion().getChatfuelResponse(), subType.getWeblinkUrl());
         } else if (subType.getWaitTime() != null) {

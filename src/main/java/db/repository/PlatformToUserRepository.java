@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlatformToUserRepository extends JpaRepository<PlatformToUser, Long> {
+    PlatformToUser findByPlatformSpecificData(String data);
 }

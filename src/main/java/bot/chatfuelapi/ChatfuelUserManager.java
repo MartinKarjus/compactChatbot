@@ -16,7 +16,7 @@ public class ChatfuelUserManager {
     @Autowired
     private UserUpdater userUpdater;
 
-    public BotUser getUserWithChatfuelUserId(String chatfuelId) {
+    public BotUser getUserWithChatfuelUserId(String chatfuelId) { //todo improve
         //easier to do with a db request i guess but i didnt have any data to test on when i made this
         System.out.println("chatfuel user id is: " + chatfuelId);
         System.out.println("user to platform map: " +userUpdater.getUserToPlatformToUser());
