@@ -43,8 +43,7 @@ public class NextContentGetter {
     private ContentByPlatform getContentFromQuestion(Question question) {
         if (question.getText() != null) {
             try {
-                ContentByPlatform contentByPlatform = objectMapper.readValue(question.getText(), ContentByPlatform.class);
-                return contentByPlatform;
+                return objectMapper.readValue(question.getText(), ContentByPlatform.class);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read contentByPlatform from question: " + question);
             }
@@ -65,33 +64,9 @@ public class NextContentGetter {
         asyncBroadcast.broadcastNextQuestion(userId, String.valueOf(q.getId()), 0);
     }
 
+
     public void findAndBroadcastNextQuestion(BotUser user, Question sentQuestion, String chatfuelUserId) {
-        newQuestionRequest(user, sentQuestion, chatfuelUserId);
-//
-//        if (sentQuestion.getLeadsToQuestionId() != null) {
-//            asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(sentQuestion.getLeadsToQuestionId()), 3000);
-//        }
-
-//        if (sentQuestion.getLeadsToQuestionName() != null) {
-//            List<Plan> plans = planRepository.findByNamedMessage(sentQuestion.getLeadsToQuestionName());
-//            if (plans.size() > 1) {
-//                throw new RuntimeException("no multiple plan handing implemented");
-//            }
-//            if (plans.size() == 0) {
-//                throw new RuntimeException("Trying to get namedMessage that doesn't exist: " + sentQuestion.getLeadsToQuestionName());
-//            }
-//
-////            Integer writeTime = getWriteTime(oldQuestion);
-//            Integer writeTime = 2000;
-//
-//            asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(plans.get(0).getQuestionId()), writeTime + BASE_WAIT_TIME);
-//        }
-
-    }
-
-
-    private void newQuestionRequest(BotUser user, Question sentQuestion, String chatfuelUserId) {
-        ContentByPlatform sentQuestionContent = getContentFromQuestion(sentQuestion);
+        ContentByPlatform sentQuestionContent = getContentFromQuestion(sentQuestion); //todo results in Null in lead_to, but first If catches all lead_to-s
 
         //todo at some point i will remake questions that have no content and tie them to it
         // at that point i also need to remake this(currently if a question contains both a Choice and a leadToQuestionName, it sends both at once..
@@ -126,7 +101,6 @@ public class NextContentGetter {
 
                     asyncBroadcast.broadcastNextQuestion(chatfuelUserId, String.valueOf(id), 3000);
                 }
-
 
                 if(chatfuelIdToForkedLeadToQuestionId.get(chatfuelUserId).size() == 0) {
                     chatfuelIdToForkedLeadToQuestionId.remove(chatfuelUserId);

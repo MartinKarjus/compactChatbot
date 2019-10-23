@@ -150,6 +150,9 @@ public class ContentSender {
     }
 
     public ChatfuelResponse getContentById(String chatfuelUserId, String questionId) {
+        if(questionId == null || questionId.equals("null")) {
+            return null;
+        }
         refreshContent(false);
         Long questionIdAsLong = Long.valueOf(questionId);
         return chatfuelContentSender.getChatfuelContentByQuestionId(chatfuelUserManager.getUserWithChatfuelUserId(chatfuelUserId), questionIdAsLong, chatfuelUserId);

@@ -63,6 +63,16 @@ public class ChatfuelContentSender {
 
     private ChatfuelResponse getContentAndScheduleFollowup(BotUser user, Long questionId, boolean isFollowup, String chatfuelUserId) {
         Question question = contentUpdater.getQuestionsById().get(questionId);
+
+        if(question.getText().equals("null")) { // .. no idea why its this, but it is and im going to rework everything that has nulls as text values anyway so i'll leave it for later
+            nextContentGetter.findAndBroadcastNextQuestion(user, question, chatfuelUserId);
+            return null;
+        }
+        if(question.getText() == null) { //todo this is a workaround for lead_to having null content
+            nextContentGetter.findAndBroadcastNextQuestion(user, question, chatfuelUserId);
+            return null;
+        }
+
         ContentByPlatform contentByPlatform = null;
 
         try {

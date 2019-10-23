@@ -18,7 +18,7 @@ public class Question {
     @SequenceGenerator(name = "question_seq", sequenceName = "question_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "date_created")
+    @Column(name = "date_created", insertable = false, updatable = false)
     private Timestamp dateCreated;
 
     @Column(name = "date_modified")

@@ -31,9 +31,9 @@ public class ChoiceHandler {
 
         HashMap<Integer, HashMap<Question, ContentByPlatform>> answerIdToQuestion = new LinkedHashMap<>();
 
-        if(questionHandler.getContentForCurrentQuestion().isFork()) {
-            questionHandler.makeNextQuestion();
-        }
+
+        questionHandler.makeNextQuestion();
+
         questionHandler.getContentForCurrentQuestion().setFork(true);
 
         for (int i = 1; i <= choice.getAnswers().keySet().size(); i++) {
@@ -41,46 +41,39 @@ public class ChoiceHandler {
             GeneralConverter converter = new GeneralConverter(questionRepository, timeToSendRepository, companyRepository, planRepository);
 
             converter.convertContent(choice.getAnswers().get(i));
+            System.out.println();
+            System.out.println("converter questions:");
+            System.out.println("\t" + converter.getQuestionHandler().getLastQuestion());
+            System.out.println("\t" + converter.getQuestionHandler().getCurrentQuestion());
 
             converter.getQuestionHandler().setCurrentQuestionAsFinal();
+            System.out.println("\tfinal: " + converter.getQuestionHandler().getFinalQuestion());
+            System.out.println("**");
+            System.out.println("question content by platform map:");
+            for (Map.Entry<Question, ContentByPlatform> entry : converter.getQuestionHandler().getQuestionContentByPlatformMap().entrySet()) {
+                System.out.println(entry.getKey());
+                System.out.println(entry.getValue());
+            }
+            System.out.println("**");
             answerIdToQuestion.put(i, converter.getQuestionHandler().getQuestionContentByPlatformMap());
-
+            System.out.println();
 
         }
 
-        questionHandler.makeNextQuestion();//todo tie last text to question
-        System.out.println("- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -");
-        System.out.println("answerIdToQuestion: " + answerIdToQuestion);
+        System.out.println("answerIdToQuestion: ");
         for (Map.Entry<Integer, HashMap<Question, ContentByPlatform>> integerHashMapEntry : answerIdToQuestion.entrySet()) {
-            System.out.println(integerHashMapEntry);
+            System.out.println("\tint: " + integerHashMapEntry.getKey());
+            System.out.println("\tquestion: " + integerHashMapEntry.getValue());
         }
-        System.out.println("- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -");
-        System.out.println("contentByPlatformMap: " + questionHandler.getQuestionContentByPlatformMap());
-        for (Map.Entry<Question, ContentByPlatform> questionContentByPlatformEntry : questionHandler.getQuestionContentByPlatformMap().entrySet()) {
-            System.out.println(questionContentByPlatformEntry);
-        }
-        System.out.println("- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -");
-        System.out.println("last question: " + questionHandler.getLastQuestion());
-        System.out.println("content: " + questionHandler.getQuestionContentByPlatformMap().get(questionHandler.getLastQuestion()));
-        System.out.println("- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -");
-
-//        chatfuelConverter.addChoice(questionHandler.getQuestionContentByPlatformMap().get(questionHandler.getLastQuestion()).getChatfuelResponse(),
-//                choice,
-//                answerIdToQuestion,
-//                questionHandler.getLastQuestion().getId());
-//        questionHandler.saveQuestion(questionHandler.getLastQuestion());
-//
-//
-//
-//        questionHandler.makeNextQuestion();
 
         chatfuelConverter.addChoice(questionHandler.getContentForCurrentQuestion().getChatfuelResponse(),
                 choice,
                 answerIdToQuestion,
                 questionHandler.getLastQuestion().getId());
-        questionHandler.saveQuestion(questionHandler.getLastQuestion());
+        //questionHandler.saveQuestion(questionHandler.getLastQuestion());
+        //questionHandler.saveQuestion(questionHandler.getCurrentQuestion());
 
-
+        questionHandler.makeNextQuestion();
 
     }
 }

@@ -12,7 +12,7 @@ import java.util.*;
 public class ContentReader {
     private List<String> validOptions = new ArrayList<>(Arrays.asList("timetosend", "daytosend", "company", "outsideworkhours", "description", "namedmessage"));
     private List<String> validMessages = new ArrayList<>(Arrays.asList("message", "writemsg", "waitmsg"));
-    private List<String> validSubtypes = new ArrayList<>(Arrays.asList("text", "image", "link", "video", "leadto", "query", "queryend", "choices", "answer", "wait", "write", "points", "setattribute"));
+    private List<String> validSubtypes = new ArrayList<>(Arrays.asList("text", "image", "link", "video", "leadto", "query", "queryend", "choices", "answer", "wait", "write", "points", "setattribute", "lead_to"));
     private List<String> ignoredTypes = new ArrayList<>(Arrays.asList("comment", "queryend"));
     private List<String> pointsPresets = new ArrayList<>(Arrays.asList("few", "medium", "many"));
 
@@ -260,6 +260,7 @@ public class ContentReader {
                             question.add(subType);
                             break;
                         case "leadto":
+                        case "lead_to":
                             subType.setLeadTo(line.get(1));
                             question.add(subType);
                             //question.add(new ContentOptions(options));
